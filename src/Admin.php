@@ -491,27 +491,16 @@ class Admin
         $group = $router->getMiddlewareGroups()['admin'] ?? [];
 
         if ($mix) {
-            $finalGroup = [];
+            // 查找 admin.permission 中间件的位置
+            $position = array_search('admin.permission', $group, true);
 
-            foreach ($group as $i => $mid) {
-                $next = $i + 1;
-
-                $finalGroup[] = $mid;
-
-                if (! isset($group[$next]) || $group[$next] !== 'admin.permission') {
-                    continue;
-                }
-
-                $finalGroup = array_merge($finalGroup, $mix);
-
-                $mix = [];
+            if ($position !== false) {
+                // 在 admin.permission 之前插入中间件
+                array_splice($group, $position, 0, $mix);
+            } else {
+                // 如果没有找到 admin.permission，则追加到末尾
+                array_push($group, ...$mix);
             }
-
-            if ($mix) {
-                $finalGroup = array_merge($finalGroup, $mix);
-            }
-
-            $group = $finalGroup;
         }
 
         $router->middlewareGroup('admin', $group);
