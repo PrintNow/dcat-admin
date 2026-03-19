@@ -1,6 +1,6 @@
 {
     "name": "printnow/laravel-admin",
-    "description": "Dcat admin 永久分叉版 / 支持 Laravel 10-13, PHP 版本限制 >= 8.1（支持 PHP 8.4）",
+    "description": "Dcat admin 永久分叉版 / 支持 Laravel 10-13, PHP 版本限制 >= 8.2（支持 PHP 8.4）",
     "type": "library",
     "keywords": [
         "dcat",
@@ -24,17 +24,17 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "laravel/framework": "~10.0|~11.0|~12.0|~13.0",
-        "spatie/eloquent-sortable": "4.*",
-        "doctrine/dbal": "~3.0|~4.0",
+        "spatie/eloquent-sortable": "^5.0",
+        "doctrine/dbal": "^4.0",
         "ext-dom": "*",
         "ext-fileinfo": "*",
         "ext-zip": "*",
         "ext-libxml": "*"
     },
     "require-dev": {
-        "laravel/dusk": "^8.3",
+        "laravel/dusk": "^8.4",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.0",
         "fakerphp/faker": "^1.24",
@@ -54,7 +54,7 @@
         }
     },
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse",
+        "phpstan": "vendor/bin/phpstan analyse ./src",
         "test": "vendor/bin/phpunit"
     },
     "extra": {
