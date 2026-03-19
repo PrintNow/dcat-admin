@@ -1,6 +1,6 @@
 {
     "name": "printnow/laravel-admin",
-    "description": "Dcat admin 永久分叉版 / 支持 Laravel 12, PHP 版本限制 >= 8.1（支持 PHP 8.4）",
+    "description": "Dcat admin 永久分叉版 / 支持 Laravel 10-13, PHP 版本限制 >= 8.1（支持 PHP 8.4）",
     "type": "library",
     "keywords": [
         "dcat",
@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": ">=8.1",
-        "laravel/framework": "~10.0|~11.0|~12.0",
+        "laravel/framework": "~10.0|~11.0|~12.0|~13.0",
         "spatie/eloquent-sortable": "4.*",
         "doctrine/dbal": "~3.0|~4.0",
         "ext-dom": "*",

@@ -8,7 +8,7 @@
     <a href="https://packagist.org/packages/printnow/laravel-admin" ><img src="https://poser.pugx.org/printnow/laravel-admin/v/stable" /></a> 
     <a href="https://packagist.org/packages/printnow/laravel-admin"><img src="https://img.shields.io/packagist/dt/printnow/laravel-admin.svg?color=" /></a> 
     <a><img src="https://img.shields.io/badge/php-8.1+-59a9f8.svg?style=flat" /></a> 
-    <a><img src="https://img.shields.io/badge/laravel-10+-59a9f8.svg?style=flat" ></a>
+    <a><img src="https://img.shields.io/badge/laravel-10~13-59a9f8.svg?style=flat" ></a>
 </p>
 
 由于原项目([jqhph/dcat-admin](https://github.com/jqhph/dcat-admin))已停止维护，故基于原作者的项目进行二次开发，修复了部分问题，并添加了更多功能。
@@ -26,6 +26,7 @@
 - [优化对 https 站点支持](https://github.com/PrintNow/dcat-admin/commit/c1227a2593f05e5210dd79e5761ac8a6246c83b4)
 - [最低 PHP 版本调整为 8.1，并支持 8.4](https://github.com/PrintNow/dcat-admin/commit/70886e3f950ff28e1fe0d104b88a254e58125178)
 - [支持 Laravel 12](https://github.com/PrintNow/dcat-admin/commit/062601e6bca6ebc9c3bcc68dbb4c8ed3e1328275)
+- [支持 Laravel 13](https://laravel.com/docs/13.x/upgrade)
 
 > [!IMPORTANT]
 > 免责声明：
