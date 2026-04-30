@@ -131,6 +131,7 @@ class HasMany extends Field
         $form = $this->buildNestedForm();
 
         $rules = $attributes = $messages = [];
+        $attrList = $msgList = [];
 
         /* @var Field $field */
         foreach ($form->fields() as $field) {
@@ -154,16 +155,12 @@ class HasMany extends Field
                 $rules[$column] = $fieldRules;
             }
 
-            $attributes = array_merge(
-                $attributes,
-                $this->formatValidationAttribute($input, $field->label(), $column)
-            );
-
-            $messages = array_merge(
-                $messages,
-                $this->formatValidationMessages($input, $field->getValidationMessages())
-            );
+            $attrList[] = $this->formatValidationAttribute($input, $field->label(), $column);
+            $msgList[] = $this->formatValidationMessages($input, $field->getValidationMessages());
         }
+
+        $attributes = $attrList ? array_merge(...$attrList) : [];
+        $messages = $msgList ? array_merge(...$msgList) : [];
 
         Arr::forget($rules, NestedForm::REMOVE_FLAG_NAME);
 
