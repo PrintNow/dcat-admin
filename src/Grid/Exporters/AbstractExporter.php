@@ -2,6 +2,7 @@
 
 namespace Dcat\Admin\Grid\Exporters;
 
+use Dcat\Admin\Enums\ExportScope;
 use Dcat\Admin\Grid;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -195,14 +196,14 @@ abstract class AbstractExporter implements ExporterInterface
         $model = $this->getGridModel();
 
         // current page
-        if ($this->scope === Grid\Exporter::SCOPE_CURRENT_PAGE) {
+        if ($this->scope === ExportScope::CurrentPage->value) {
             $page = $model->getCurrentPage();
             $perPage = $model->getPerPage();
         }
 
         $model->usePaginate(false);
 
-        if ($page && $this->scope !== Grid\Exporter::SCOPE_SELECTED_ROWS) {
+        if ($page && $this->scope !== ExportScope::SelectedRows->value) {
             $perPage = $perPage ?: $this->getChunkSize();
 
             $model->forPage($page, $perPage);
@@ -290,7 +291,7 @@ abstract class AbstractExporter implements ExporterInterface
 
         $this->scope = $scope;
 
-        if ($scope == Grid\Exporter::SCOPE_SELECTED_ROWS) {
+        if ($scope == ExportScope::SelectedRows->value) {
             $selected = explode(',', $args);
 
             $this->grid->model()->whereIn($this->grid->getKeyName(), $selected);

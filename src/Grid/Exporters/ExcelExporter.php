@@ -2,6 +2,7 @@
 
 namespace Dcat\Admin\Grid\Exporters;
 
+use Dcat\Admin\Enums\ExportScope;
 use Dcat\Admin\Exception\RuntimeException;
 use Dcat\Admin\Grid;
 use Dcat\EasyExcel\Excel;
@@ -26,7 +27,7 @@ class ExcelExporter extends AbstractExporter
 
         $exporter = Excel::export();
 
-        if ($this->scope === Grid\Exporter::SCOPE_ALL) {
+        if ($this->scope === ExportScope::All->value) {
             $exporter->chunk(function (int $times) {
                 return $this->buildData($times);
             });

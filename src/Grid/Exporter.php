@@ -2,6 +2,7 @@
 
 namespace Dcat\Admin\Grid;
 
+use Dcat\Admin\Enums\ExportScope;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Grid\Exporters\ExporterInterface;
 
@@ -14,10 +15,12 @@ class Exporter
 {
     /**
      * Export scope constants.
+     *
+     * @deprecated Use ExportScope enum instead
      */
-    const SCOPE_ALL = 'all';
-    const SCOPE_CURRENT_PAGE = 'page';
-    const SCOPE_SELECTED_ROWS = 'selected';
+    const SCOPE_ALL = ExportScope::All->value;
+    const SCOPE_CURRENT_PAGE = ExportScope::CurrentPage->value;
+    const SCOPE_SELECTED_ROWS = ExportScope::SelectedRows->value;
 
     /**
      * Available exporter drivers.
@@ -209,24 +212,25 @@ class Exporter
     /**
      * Format query for export url.
      *
-     * @param  int  $scope
-     * @param  null  $args
+     * @param  string|ExportScope  $scope
+     * @param  mixed  $args
      * @return array
      */
-    public function formatExportQuery($scope = '', $args = null)
+    public function formatExportQuery(string|ExportScope $scope = '', $args = null)
     {
         $query = '';
+        $scopeValue = $scope instanceof ExportScope ? $scope->value : $scope;
 
-        if ($scope == static::SCOPE_ALL) {
-            $query = $scope;
+        if ($scopeValue == ExportScope::All->value) {
+            $query = $scopeValue;
         }
 
-        if ($scope == static::SCOPE_CURRENT_PAGE) {
-            $query = "$scope:$args";
+        if ($scopeValue == ExportScope::CurrentPage->value) {
+            $query = "$scopeValue:$args";
         }
 
-        if ($scope == static::SCOPE_SELECTED_ROWS) {
-            $query = "$scope:$args";
+        if ($scopeValue == ExportScope::SelectedRows->value) {
+            $query = "$scopeValue:$args";
         }
 
         return [$this->getQueryName() => $query];
