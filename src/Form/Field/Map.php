@@ -3,6 +3,7 @@
 namespace Dcat\Admin\Form\Field;
 
 use Dcat\Admin\Admin;
+use Dcat\Admin\Enums\MapProvider;
 use Dcat\Admin\Form\Field;
 use Illuminate\Support\Str;
 
@@ -29,11 +30,13 @@ class Map extends Field
     {
         $keys = config('admin.map.keys');
 
-        $js = match (static::getUsingMap()) {
-            'tencent' => '//map.qq.com/api/js?v=2.exp&key='.($keys['tencent'] ?? env('TENCENT_MAP_API_KEY')),
-            'google' => '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.($keys['google'] ?? env('GOOGLE_API_KEY')),
-            'yandex' => '//api-maps.yandex.ru/2.1/?lang=ru_RU',
-            'amap' => '//webapi.amap.com/maps?v=1.4.15&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geolocation&key='.($keys['amap'] ?? env('AMAP_API_KEY')),
+        $provider = static::getUsingMap();
+
+        $js = match ($provider) {
+            MapProvider::Tencent->value => '//map.qq.com/api/js?v=2.exp&key='.($keys['tencent'] ?? env('TENCENT_MAP_API_KEY')),
+            MapProvider::Google->value => '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.($keys['google'] ?? env('GOOGLE_API_KEY')),
+            MapProvider::Yandex->value => '//api-maps.yandex.ru/2.1/?lang=ru_RU',
+            MapProvider::Amap->value => '//webapi.amap.com/maps?v=1.4.15&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geolocation&key='.($keys['amap'] ?? env('AMAP_API_KEY')),
             default => '//api.map.baidu.com/api?v=2.0&ak='.($keys['baidu'] ?? env('BAIDU_MAP_API_KEY')),
         };
 
@@ -54,10 +57,10 @@ class Map extends Field
          * people in China can use Tencent map instead(;
          */
         match (static::getUsingMap()) {
-            'tencent' => $this->tencent(),
-            'google' => $this->google(),
-            'yandex' => $this->yandex(),
-            'amap' => $this->amap(),
+            MapProvider::Tencent->value => $this->tencent(),
+            MapProvider::Google->value => $this->google(),
+            MapProvider::Yandex->value => $this->yandex(),
+            MapProvider::Amap->value => $this->amap(),
             default => $this->baidu(),
         };
     }
@@ -69,34 +72,34 @@ class Map extends Field
         return $this;
     }
 
-    protected static function getUsingMap()
+    protected static function getUsingMap(): string
     {
         return config('admin.map.provider') ?: config('admin.map_provider');
     }
 
     public function google()
     {
-        return $this->addVariables(['type' => 'google']);
+        return $this->addVariables(['type' => MapProvider::Google->value]);
     }
 
     public function tencent()
     {
-        return $this->addVariables(['type' => 'tencent']);
+        return $this->addVariables(['type' => MapProvider::Tencent->value]);
     }
 
     public function yandex()
     {
-        return $this->addVariables(['type' => 'yandex']);
+        return $this->addVariables(['type' => MapProvider::Yandex->value]);
     }
 
     public function baidu()
     {
-        return $this->addVariables(['type' => 'baidu', 'searchId' => 'bdmap'.Str::random()]);
+        return $this->addVariables(['type' => MapProvider::Baidu->value, 'searchId' => 'bdmap'.Str::random()]);
     }
 
     public function amap()
     {
-        return $this->addVariables(['type' => 'amap', 'searchId' => 'amap'.Str::random()]);
+        return $this->addVariables(['type' => MapProvider::Amap->value, 'searchId' => 'amap'.Str::random()]);
     }
 
     protected function getDefaultElementClass()
