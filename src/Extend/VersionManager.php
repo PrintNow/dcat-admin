@@ -3,6 +3,7 @@
 namespace Dcat\Admin\Extend;
 
 use Carbon\Carbon;
+use Dcat\Admin\Enums\HistoryType;
 use Dcat\Admin\Models\Extension;
 use Dcat\Admin\Models\ExtensionHistory;
 use Dcat\Admin\Support\DatabaseUpdater;
@@ -19,8 +20,11 @@ class VersionManager
 
     const NO_VERSION_VALUE = 0;
 
-    const HISTORY_TYPE_COMMENT = 1;
-    const HISTORY_TYPE_SCRIPT = 2;
+    /**
+     * @deprecated Use HistoryType enum instead
+     */
+    const HISTORY_TYPE_COMMENT = HistoryType::Comment->value;
+    const HISTORY_TYPE_SCRIPT = HistoryType::Script->value;
 
     protected $fileVersions;
     protected $databaseVersions;
@@ -128,9 +132,9 @@ class VersionManager
                     break;
                 }
 
-                if ($history->type == static::HISTORY_TYPE_COMMENT) {
+                if ($history->type == HistoryType::Comment->value) {
                     $this->removeDatabaseComment($name, $history->version);
-                } elseif ($history->type == static::HISTORY_TYPE_SCRIPT) {
+                } elseif ($history->type == HistoryType::Script->value) {
                     $this->removeDatabaseScript($name, $history->version, $history->detail);
                 }
 
@@ -290,7 +294,7 @@ class VersionManager
     {
         ExtensionHistory::query()->create([
             'name'    => $name,
-            'type'    => static::HISTORY_TYPE_COMMENT,
+            'type'    => HistoryType::Comment->value,
             'version' => $version,
             'detail'  => $comment,
         ]);
@@ -300,7 +304,7 @@ class VersionManager
     {
         ExtensionHistory::query()
             ->where('name', $name)
-            ->where('type', static::HISTORY_TYPE_COMMENT)
+            ->where('type', HistoryType::Comment->value)
             ->where('version', $version)
             ->delete();
     }
@@ -318,7 +322,7 @@ class VersionManager
         $this->updater->setUp($this->resolveUpdater($name, $updateFile), function () use ($name, $version, $script) {
             ExtensionHistory::query()->create([
                 'name'    => $name,
-                'type'    => static::HISTORY_TYPE_SCRIPT,
+                'type'    => HistoryType::Script->value,
                 'version' => $version,
                 'detail'  => $script,
             ]);
@@ -345,7 +349,7 @@ class VersionManager
         $this->updater->packDown($this->resolveUpdater($name, $updateFile), function () use ($name, $version, $script) {
             ExtensionHistory::query()
                 ->where('name', $name)
-                ->where('type', static::HISTORY_TYPE_SCRIPT)
+                ->where('type', HistoryType::Script->value)
                 ->where('version', $version)
                 ->where('detail', $script)
                 ->delete();
@@ -387,11 +391,11 @@ class VersionManager
                 continue;
             }
 
-            if ($history->type == static::HISTORY_TYPE_COMMENT && ! $script) {
+            if ($history->type == HistoryType::Comment->value && ! $script) {
                 return true;
             }
 
-            if ($history->type == static::HISTORY_TYPE_SCRIPT && $history->detail == $script) {
+            if ($history->type == HistoryType::Script->value && $history->detail == $script) {
                 return true;
             }
         }
@@ -443,7 +447,7 @@ class VersionManager
         $histories = $this->getDatabaseHistory($name);
 
         $lastHistory = Arr::last(Arr::where($histories, function ($history) {
-            return $history->type === static::HISTORY_TYPE_COMMENT;
+            return $history->type === HistoryType::Comment->value;
         }));
 
         return $lastHistory ? $lastHistory->detail : '';
