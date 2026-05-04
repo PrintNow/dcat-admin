@@ -6,6 +6,7 @@ use Closure;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Contracts\FieldsCollection;
 use Dcat\Admin\Contracts\UploadField;
+use Dcat\Admin\Enums\FormMode;
 use Dcat\Admin\Form;
 use Dcat\Admin\Form\Concerns\HasFields;
 use Dcat\Admin\Form\Field\Hidden;
@@ -32,10 +33,12 @@ class Builder implements FieldsCollection
 
     /**
      * Modes constants.
+     *
+     * @deprecated Use FormMode enum instead
      */
-    const MODE_EDIT = 'edit';
-    const MODE_CREATE = 'create';
-    const MODE_DELETE = 'delete';
+    const MODE_EDIT = FormMode::Edit->value;
+    const MODE_CREATE = FormMode::Create->value;
+    const MODE_DELETE = FormMode::Delete->value;
 
     /**
      * @var mixed
@@ -62,7 +65,7 @@ class Builder implements FieldsCollection
      *
      * @var string
      */
-    protected $mode = self::MODE_CREATE;
+    protected $mode = self::MODE_CREATE; // Keep backward compatibility
 
     /**
      * @var Field[]
@@ -212,29 +215,29 @@ class Builder implements FieldsCollection
     }
 
     /**
-     * Set the builder mode.
+     * Get or set the form mode.
      *
-     * @param string|null $mode
+     * @param  string|FormMode|null  $mode
      * @return void|string
      */
-    public function mode(?string $mode = null)
+    public function mode(string|FormMode|null $mode = null)
     {
         if ($mode === null) {
             return $this->mode;
         }
 
-        $this->mode = $mode;
+        $this->mode = $mode instanceof FormMode ? $mode->value : $mode;
     }
 
     /**
      * Returns builder is $mode.
      *
-     * @param $mode
+     * @param  string|FormMode  $mode
      * @return bool
      */
-    public function isMode($mode)
+    public function isMode(string|FormMode $mode): bool
     {
-        return $this->mode == $mode;
+        return $this->mode == ($mode instanceof FormMode ? $mode->value : $mode);
     }
 
     /**
@@ -242,9 +245,9 @@ class Builder implements FieldsCollection
      *
      * @return bool
      */
-    public function isCreating()
+    public function isCreating(): bool
     {
-        return $this->isMode(static::MODE_CREATE);
+        return $this->isMode(FormMode::Create);
     }
 
     /**
@@ -252,9 +255,9 @@ class Builder implements FieldsCollection
      *
      * @return bool
      */
-    public function isEditing()
+    public function isEditing(): bool
     {
-        return $this->isMode(static::MODE_EDIT);
+        return $this->isMode(FormMode::Edit);
     }
 
     /**
@@ -262,9 +265,9 @@ class Builder implements FieldsCollection
      *
      * @return bool
      */
-    public function isDeleting()
+    public function isDeleting(): bool
     {
-        return $this->isMode(static::MODE_DELETE);
+        return $this->isMode(FormMode::Delete);
     }
 
     /**
@@ -291,7 +294,7 @@ class Builder implements FieldsCollection
      */
     public function resource($slice = null)
     {
-        if ($this->mode == self::MODE_CREATE) {
+        if ($this->mode == FormMode::Create->value) {
             return $this->form->resource(-1);
         }
         if ($slice !== null) {
@@ -343,11 +346,11 @@ class Builder implements FieldsCollection
             return $this->action;
         }
 
-        if ($this->isMode(static::MODE_EDIT)) {
+        if ($this->isMode(FormMode::Edit)) {
             return $this->form->resource().'/'.$this->id;
         }
 
-        if ($this->isMode(static::MODE_CREATE)) {
+        if ($this->isMode(FormMode::Create)) {
             return $this->form->resource(-1);
         }
 
@@ -385,11 +388,11 @@ class Builder implements FieldsCollection
             return $this->title;
         }
 
-        if ($this->mode == static::MODE_CREATE) {
+        if ($this->mode == FormMode::Create->value) {
             return trans('admin.create');
         }
 
-        if ($this->mode == static::MODE_EDIT) {
+        if ($this->mode == FormMode::Edit->value) {
             return trans('admin.edit');
         }
 
@@ -556,7 +559,7 @@ class Builder implements FieldsCollection
     {
         $attributes = [];
 
-        if ($this->isMode(static::MODE_EDIT)) {
+        if ($this->isMode(FormMode::Edit)) {
             $this->addHiddenField((new Hidden('_method'))->value('PUT'));
         }
 
@@ -613,7 +616,7 @@ class Builder implements FieldsCollection
      */
     protected function removeReservedFields()
     {
-        if (! $this->isMode(static::MODE_CREATE)) {
+        if (! $this->isMode(FormMode::Create)) {
             return;
         }
 

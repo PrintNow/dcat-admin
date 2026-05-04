@@ -5,6 +5,7 @@ namespace Dcat\Admin;
 use Closure;
 use Dcat\Admin\Actions\Action;
 use Dcat\Admin\Contracts\Repository;
+use Dcat\Admin\Enums\FormMode;
 use Dcat\Admin\Form\AbstractTool;
 use Dcat\Admin\Form\Builder;
 use Dcat\Admin\Form\Concerns;
@@ -509,7 +510,7 @@ class Form implements Renderable
      */
     public function edit($id)
     {
-        $this->builder->mode(Builder::MODE_EDIT);
+        $this->builder->mode(FormMode::Edit);
         $this->builder->setResourceId($id);
 
         $this->model($this->repository->edit($this));
@@ -547,7 +548,7 @@ class Form implements Renderable
     {
         try {
             $this->builder->setResourceId($id);
-            $this->builder->mode(Builder::MODE_DELETE);
+            $this->builder->mode(FormMode::Delete);
 
             $data = $this->repository->deleting($this);
 
@@ -849,7 +850,7 @@ class Form implements Renderable
     protected function beforeUpdate($id, array &$data)
     {
         $this->builder->setResourceId($id);
-        $this->builder->mode(Builder::MODE_EDIT);
+        $this->builder->mode(FormMode::Edit);
 
         $this->inputs = $data;
 
