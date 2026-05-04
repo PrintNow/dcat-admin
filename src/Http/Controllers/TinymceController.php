@@ -12,7 +12,7 @@ class TinymceController
     public function upload(Request $request)
     {
         $file = $request->file('file');
-        $dir = trim($request->get('dir'), '/');
+        $dir = $this->sanitizeDir($request->get('dir'));
         $disk = $this->disk();
 
         $newName = $this->generateNewName($file);
@@ -28,11 +28,32 @@ class TinymceController
     }
 
     /**
+     * Sanitize directory path to prevent path traversal.
+     */
+    protected function sanitizeDir(?string $dir): string
+    {
+        $dir = trim($dir ?? '', '/');
+
+        // 移除路径遍历字符
+        $dir = str_replace(['../', '..\\', '..'], '', $dir);
+
+        // 确保路径不以点开头（隐藏文件）
+        $dir = ltrim($dir, '.');
+
+        return $dir ?: 'uploads';
+    }
+
+    /**
      * @return \Illuminate\Contracts\Filesystem\Filesystem|FilesystemAdapter
      */
     protected function disk()
     {
         $disk = request()->get('disk') ?: config('admin.upload.disk');
+
+        // 验证磁盘配置存在
+        if (! config("filesystems.disks.{$disk}")) {
+            $disk = config('admin.upload.disk', 'local');
+        }
 
         return Storage::disk($disk);
     }
