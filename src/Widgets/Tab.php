@@ -3,12 +3,16 @@
 namespace Dcat\Admin\Widgets;
 
 use Dcat\Admin\Admin;
+use Dcat\Admin\Enums\TabType;
 use Illuminate\Contracts\Support\Renderable;
 
 class Tab extends Widget
 {
-    const TYPE_CONTENT = 1;
-    const TYPE_LINK = 2;
+    /**
+     * @deprecated Use TabType enum instead
+     */
+    const TYPE_CONTENT = TabType::Content->value;
+    const TYPE_LINK = TabType::Link->value;
 
     /**
      * @var string
@@ -43,7 +47,7 @@ class Tab extends Widget
             'id'      => $id ?: mt_rand(),
             'title'   => $title,
             'content' => $this->toString($this->formatRenderable($content)),
-            'type'    => static::TYPE_CONTENT,
+            'type'    => TabType::Content->value,
         ];
 
         if ($active) {
@@ -67,7 +71,7 @@ class Tab extends Widget
             'id'      => mt_rand(),
             'title'   => $title,
             'href'    => $href,
-            'type'    => static::TYPE_LINK,
+            'type'    => TabType::Link->value,
         ];
 
         if ($active) {
