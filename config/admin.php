@@ -230,7 +230,7 @@ return [
     'menu' => [
         'cache' => [
             // enable cache or not
-            'enable' => false,
+            'enable' => true,
             'store'  => 'file',
         ],
 

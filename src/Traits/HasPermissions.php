@@ -13,7 +13,7 @@ trait HasPermissions
     /**
      * Get all permissions of user.
      *
-     * @return mixed
+     * @return Collection
      */
     public function allPermissions(): Collection
     {
@@ -29,10 +29,48 @@ trait HasPermissions
     }
 
     /**
+     * Get permissions map for fast lookup.
+     *
+     * @return array
+     */
+    protected function getPermissionsMap(): array
+    {
+        return once(function () {
+            $slugs = [];
+            $ids = [];
+            foreach ($this->allPermissions() as $perm) {
+                $slugs[$perm->slug] = true;
+                $ids[$perm->id] = true;
+            }
+
+            return ['slugs' => $slugs, 'ids' => $ids];
+        });
+    }
+
+    /**
+     * Get roles map for fast lookup.
+     *
+     * @return array
+     */
+    protected function getRolesMap(): array
+    {
+        return once(function () {
+            $slugs = [];
+            $ids = [];
+            foreach ($this->roles as $role) {
+                $slugs[$role->slug] = true;
+                $ids[$role->id] = true;
+            }
+
+            return ['slugs' => $slugs, 'ids' => $ids];
+        });
+    }
+
+    /**
      * Check if user has permission.
      *
-     * @param $ability
-     * @param  array|mixed  $arguments
+     * @param  string|int  $ability
+     * @param  array|mixed  $paramters
      * @return bool
      */
     public function can($ability, $paramters = []): bool
@@ -45,18 +83,15 @@ trait HasPermissions
             return true;
         }
 
-        $permissions = $this->allPermissions();
+        $map = $this->getPermissionsMap();
 
-        return $permissions->pluck('slug')->contains($ability) ?:
-            $permissions
-            ->pluck('id')
-            ->contains($ability);
+        return isset($map['slugs'][$ability]) || isset($map['ids'][$ability]);
     }
 
     /**
      * Check if user has no permission.
      *
-     * @param $permission
+     * @param  string  $permission
      * @return bool
      */
     public function cannot(string $permission): bool
@@ -67,7 +102,7 @@ trait HasPermissions
     /**
      * Check if user is administrator.
      *
-     * @return mixed
+     * @return bool
      */
     public function isAdministrator(): bool
     {
@@ -80,39 +115,45 @@ trait HasPermissions
     /**
      * Check if user is $role.
      *
-     * @param  string  $role
-     * @return mixed
+     * @param  string|int  $role
+     * @return bool
      */
-    public function isRole(string $role): bool
+    public function isRole(string|int $role): bool
     {
-        /* @var Collection $roles */
-        $roles = $this->roles;
+        $map = $this->getRolesMap();
 
-        return $roles->pluck('slug')->contains($role) ?:
-            $roles->pluck('id')->contains($role);
+        return isset($map['slugs'][$role]) || isset($map['ids'][$role]);
     }
 
     /**
      * Check if user in $roles.
      *
      * @param  string|array|Arrayable  $roles
-     * @return mixed
+     * @return bool
      */
     public function inRoles($roles = []): bool
     {
-        /* @var Collection $all */
-        $all = $this->roles;
-
         $roles = Helper::array($roles);
 
-        return $all->pluck('slug')->intersect($roles)->isNotEmpty() ?:
-            $all->pluck('id')->intersect($roles)->isNotEmpty();
+        if (empty($roles)) {
+            return false;
+        }
+
+        $map = $this->getRolesMap();
+
+        foreach ($roles as $role) {
+            if (isset($map['slugs'][$role]) || isset($map['ids'][$role])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      * If visible for roles.
      *
-     * @param $roles
+     * @param  array  $roles
      * @return bool
      */
     public function visible($roles = []): bool
