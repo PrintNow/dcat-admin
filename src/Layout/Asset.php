@@ -281,6 +281,10 @@ class Asset
             $this->alias[$n]['css'] = [];
 
             foreach ($before as $css) {
+                if (str_contains($css, "-{$color}.css")) {
+                    $this->alias[$n]['css'][] = $css;
+                    continue;
+                }
                 $this->alias[$n]['css'][] = str_replace('.css', "-{$color}.css", $css);
             }
         }
