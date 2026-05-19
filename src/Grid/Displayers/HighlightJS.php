@@ -28,7 +28,7 @@ class HighlightJS extends AbstractDisplayer
      * @return void
      */
     public
-    static function setResource(array|string $js = null, array|string $css = null): void
+    static function setResource(array|string|null $js = null, array|string|null $css = null): void
     {
         if ($js !== null) {
             static::$js = is_array($js) ? $js : [$js];
