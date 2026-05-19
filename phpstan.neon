@@ -1,0 +1,11 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 1
+    phpVersion: 80100
+    paths:
+        - src
+    ignoreErrors:
+        # class_alias 中使用的 Facade 类名
+        - '#Class Admin not found#'

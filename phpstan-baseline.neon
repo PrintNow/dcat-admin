@@ -1,0 +1,631 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Actions/Action.php
+
+		-
+			message: '#^Result of static method Dcat\\Admin\\Admin\:\:script\(\) \(void\) is used\.$#'
+			identifier: staticMethod.void
+			count: 1
+			path: src/Admin.php
+
+		-
+			message: '#^Call to static method forceScheme\(\) on an unknown class URL\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/AdminServiceProvider.php
+
+		-
+			message: '#^Call to static method getSchemaBuilder\(\) on an unknown class DB\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Console/ExportSeedCommand.php
+
+		-
+			message: '#^Call to static method table\(\) on an unknown class DB\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Console/ExportSeedCommand.php
+
+		-
+			message: '#^Result of method Illuminate\\Console\\Command\:\:error\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/Console/ExtensionDiableCommand.php
+
+		-
+			message: '#^Result of method Illuminate\\Console\\Command\:\:error\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/Console/ExtensionEnableCommand.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: src/Console/ExtensionInstallCommand.php
+
+		-
+			message: '#^Result of method Illuminate\\Console\\Command\:\:error\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/Console/ExtensionMakeCommand.php
+
+		-
+			message: '#^Call to an undefined method Dcat\\Admin\\Console\\GeneratorCommand\:\:addTestOptions\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/GeneratorCommand.php
+
+		-
+			message: '#^Call to an undefined method Dcat\\Admin\\Console\\GeneratorCommand\:\:handleTestCreation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/GeneratorCommand.php
+
+		-
+			message: '#^Call to static method getRoutes\(\) on an unknown class Route\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Console/IdeHelperCommand.php
+
+		-
+			message: '#^Instantiated class League\\Flysystem\\Adapter\\Local not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/Console/PublishCommand.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Extension\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Extend/Manager.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Extend\\ServiceProvider\:\:getLogoBase64\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Extend/ServiceProvider.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Extend\\Setting\:\:title\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Extend/Setting.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Form\:\:deleteFileWhenCreating\(\) should return Illuminate\\Http\\JsonResponse but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Form.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Form\:\:handleOrderable\(\) should return Symfony\\Component\\HttpFoundation\\Response but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Form.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Form.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Form\\Builder\:\:pushField\(\) should return Illuminate\\Support\\Collection but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Form/Builder.php
+
+		-
+			message: '#^Function captcha_src not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Form/Field/Captcha.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Form\\Field\\File\:\:deleteFile\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: src/Form/Field/File.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Form\\Field\\File\:\:getValidationErrors\(\) should return bool\|Illuminate\\Support\\MessageBag but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Form/Field/File.php
+
+		-
+			message: '#^Call to static method make\(\) on an unknown class Intervention\\Image\\Facades\\Image\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Form/Field/Image.php
+
+		-
+			message: '#^Call to static method make\(\) on an unknown class Intervention\\Image\\ImageManagerStatic\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Form/Field/Image.php
+
+		-
+			message: '#^Parameter \$constraint of anonymous function has invalid type Intervention\\Image\\Constraint\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Form/Field/Image.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Form\\Field\\Nullable\:\:render\(\) should return Illuminate\\Contracts\\View\\Factory\|Illuminate\\View\\View\|string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Form/Field/Nullable.php
+
+		-
+			message: '#^Class Dcat\\Admin\\Form\\Field\\Model not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Form/Field/Select.php
+
+		-
+			message: '#^Variable \$tools in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/Form/Tools.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Grid.php
+
+		-
+			message: '#^Variable \$scope might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: src/Grid.php
+
+		-
+			message: '#^Class StringBackedEnum not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Grid/Column.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Grid\\Column\\Filter\:\:render\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Grid/Column/Filter.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Grid/Column/Filter.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Grid\\Displayers\\DropdownActions\:\:getDeleteLabel\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Grid/Displayers/DropdownActions.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Grid\\Displayers\\DropdownActions\:\:getEditLabel\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Grid/Displayers/DropdownActions.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Grid\\Displayers\\DropdownActions\:\:getQuickEditLabel\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Grid/Displayers/DropdownActions.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Grid\\Displayers\\DropdownActions\:\:getViewLabel\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Grid/Displayers/DropdownActions.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Grid\\Exporters\\AbstractExporter\:\:\$modelQueries\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Grid/Exporters/AbstractExporter.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Grid/Exporters/AbstractExporter.php
+
+		-
+			message: '#^Call to static method urlWithQuery\(\) on an unknown class Dcat\\Admin\\Grid\\Filter\\Presenter\\Helper\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Grid/Filter/Presenter/Select.php
+
+		-
+			message: '#^Class Dcat\\Admin\\Grid\\Filter\\Presenter\\Arrayable not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Grid/Filter/Presenter/Select.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Grid\\FixColumns\:\:apply\(\) should return Closure but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Grid/FixColumns.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Grid\\LazyRenderable\:\:\$_simple_\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Grid/LazyRenderable.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Grid\\Model\:\:\$model\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Grid/Model.php
+
+		-
+			message: '#^Call to an undefined method Dcat\\Admin\\Http\\Controllers\\AdminController\:\:detail\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Controllers/AdminController.php
+
+		-
+			message: '#^Call to an undefined method Dcat\\Admin\\Http\\Controllers\\AdminController\:\:form\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: src/Http/Controllers/AdminController.php
+
+		-
+			message: '#^Call to an undefined method Dcat\\Admin\\Http\\Controllers\\AdminController\:\:grid\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Controllers/AdminController.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Http\\Controllers\\AuthController\:\:\$password\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Controllers/AuthController.php
+
+		-
+			message: '#^Access to undefined constant static\(Dcat\\Admin\\Http\\Controllers\\AuthController\)\:\:CURRENT_URL_NAME\.$#'
+			identifier: classConstant.notFound
+			count: 1
+			path: src/Http/Controllers/AuthController.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Http\\Controllers\\HandleFormController\:\:getField\(\) should return Dcat\\Admin\\Form\\Field\\File but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Http/Controllers/HandleFormController.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Http\\Controllers\\UserController\:\:\$roles\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/Http/Controllers/UserController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Http/JsonResponse.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Http\\Repositories\\Extension\:\:delete\(\) should return bool\|Dcat\\Admin\\Http\\JsonResponse\|int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Http/Repositories/Extension.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Http\\Repositories\\Extension\:\:store\(\) should return bool\|Dcat\\Admin\\Http\\JsonResponse\|int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Http/Repositories/Extension.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Layout/Content.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Administrator\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Administrator\:\:first\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Administrator\:\:truncate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Menu\:\:insert\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Menu\:\:truncate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Permission\:\:insert\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Permission\:\:truncate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Role\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Role\:\:first\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Role\:\:truncate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/AdminTablesSeeder.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Models\\Administrator\:\:\$avatar\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Administrator.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Menu\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/Menu.php
+
+		-
+			message: '#^Call to an undefined static method Illuminate\\Support\\Facades\\Request\:\:offsetUnset\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/Menu.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 3
+			path: src/Models/Menu.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Models\\Permission\:\:\$http_method\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Permission.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Models\\Permission\:\:\$http_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Permission.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Models\\Permission\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Models/Permission.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Permission\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/Permission.php
+
+		-
+			message: '#^Call to an undefined static method Illuminate\\Support\\Facades\\Request\:\:offsetUnset\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Models/Permission.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 3
+			path: src/Models/Permission.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Models/Role.php
+
+		-
+			message: '#^Class Dcat\\Laravel\\Database\\SoftDeletes not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Repositories/EloquentRepository.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Repositories\\EloquentRepository\:\:getOrderColumn\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Repositories/EloquentRepository.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Repositories\\EloquentRepository\:\:getParentColumn\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Repositories/EloquentRepository.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Repositories\\EloquentRepository\:\:getTitleColumn\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Repositories/EloquentRepository.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Repositories/EloquentRepository.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Repositories/Repository.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Scaffold\\LangCreator\:\:create\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Scaffold/LangCreator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Show.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 2
+			path: src/Support/ComposerProperty.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Support\\DatabaseUpdater\:\:resolve\(\) should return object but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Support/DatabaseUpdater.php
+
+		-
+			message: '#^Variable \$item on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: src/Support/Helper.php
+
+		-
+			message: '#^Variable \$methods in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/Support/Helper.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Support/JavaScript.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Support/LazyRenderable.php
+
+		-
+			message: '#^Call to an undefined static method Dcat\\Admin\\Models\\Setting\:\:pluck\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Support/Setting.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Support/Setting.php
+
+		-
+			message: '#^Variable \$folders might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/Support/Zip.php
+
+		-
+			message: '#^Result of method Dcat\\Admin\\Tree\:\:disableCreateButton\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/Tree.php
+
+		-
+			message: '#^Result of method Dcat\\Admin\\Tree\:\:disableRefreshButton\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/Tree.php
+
+		-
+			message: '#^Result of method Dcat\\Admin\\Tree\:\:disableSaveButton\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/Tree.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Tree.php
+
+		-
+			message: '#^Access to an undefined property Dcat\\Admin\\Widgets\\Box\:\:\$class\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Widgets/Box.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Widgets\\DialogForm\:\:render\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Widgets/DialogForm.php
+
+		-
+			message: '#^Call to an undefined method \$this\(Dcat\\Admin\\Widgets\\Form\)&Dcat\\Admin\\Contracts\\LazyRenderable\:\:payload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Widgets/Form.php
+
+		-
+			message: '#^Call to an undefined method Dcat\\Admin\\Widgets\\Form\:\:payload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Widgets/Form.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Widgets/Form.php
+
+		-
+			message: '#^Method Dcat\\Admin\\Widgets\\Tooltip\:\:render\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Widgets/Tooltip.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/Widgets/Widget.php
