@@ -25,6 +25,6 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
 
-      - run: composer install --no-interaction --prefer-dist --ignore-platform-req=php
+      - run: composer install --no-interaction --prefer-dist
 
       - run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M --error-format=github
