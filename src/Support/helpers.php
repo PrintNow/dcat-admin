@@ -2,10 +2,9 @@
 
 use Dcat\Admin\Admin;
 use Dcat\Admin\Support\Helper;
+use Dcat\Admin\Support\SessionMessage;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\Response;
 
 if (! function_exists('admin_setting')) {
@@ -298,7 +297,7 @@ if (! function_exists('admin_base_path')) {
 
 if (! function_exists('admin_toastr')) {
     /**
-     * Flash a toastr message bag to session.
+     * Flash a toastr message to session.
      *
      * @param  string  $message
      * @param  string  $type
@@ -306,7 +305,7 @@ if (! function_exists('admin_toastr')) {
      */
     function admin_toastr($message = '', $type = 'success', $options = [])
     {
-        $toastr = new MessageBag(get_defined_vars());
+        $toastr = SessionMessage::make($type, $message, $options);
 
         session()->flash('dcat-admin-toastr', $toastr);
     }
@@ -353,7 +352,7 @@ if (! function_exists('admin_warning')) {
 
 if (! function_exists('admin_info')) {
     /**
-     * Flash a message bag to session.
+     * Flash a message to session.
      *
      * @param  string  $title
      * @param  string  $message
@@ -361,7 +360,7 @@ if (! function_exists('admin_info')) {
      */
     function admin_info($title, $message = '', $type = 'info')
     {
-        $message = new MessageBag(get_defined_vars());
+        $message = SessionMessage::make($title, $message);
 
         session()->flash($type, $message);
     }

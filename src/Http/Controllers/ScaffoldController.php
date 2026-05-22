@@ -11,13 +11,13 @@ use Dcat\Admin\Scaffold\MigrationCreator;
 use Dcat\Admin\Scaffold\ModelCreator;
 use Dcat\Admin\Scaffold\RepositoryCreator;
 use Dcat\Admin\Support\Helper;
+use Dcat\Admin\Support\SessionMessage;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
 class ScaffoldController extends Controller
@@ -275,10 +275,7 @@ class ScaffoldController extends Controller
 
     protected function backWithException(\Exception $exception)
     {
-        $error = new MessageBag([
-            'title'   => 'Error',
-            'message' => $exception->getMessage(),
-        ]);
+        $error = SessionMessage::make('Error', $exception->getMessage());
 
         return redirect()->refresh()->withInput()->with(compact('error'));
     }
@@ -293,10 +290,7 @@ class ScaffoldController extends Controller
 
         $messages[] = "<br />$message";
 
-        $success = new MessageBag([
-            'title'   => 'Success',
-            'message' => implode('<br />', $messages),
-        ]);
+        $success = SessionMessage::make('Success', implode('<br />', $messages));
 
         return redirect()->refresh()->with(compact('success'));
     }
