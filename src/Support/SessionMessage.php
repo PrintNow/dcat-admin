@@ -21,15 +21,6 @@ class SessionMessage
         return new static($title, $message, $options);
     }
 
-    public static function fromArray(array $data): static
-    {
-        return new static(
-            title: (string) (\Illuminate\Support\Arr::first((array) ($data['title'] ?? '')) ?? ''),
-            message: (string) (\Illuminate\Support\Arr::first((array) ($data['message'] ?? '')) ?? ''),
-            options: (array) ($data['options'] ?? []),
-        );
-    }
-
     public function getTitle(): string
     {
         return $this->title;
@@ -45,12 +36,4 @@ class SessionMessage
         return $this->options;
     }
 
-    public function toArray(): array
-    {
-        return [
-            'title' => $this->title,
-            'message' => $this->message,
-            'options' => $this->options,
-        ];
-    }
 }
