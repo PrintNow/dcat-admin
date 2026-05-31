@@ -15,6 +15,8 @@ class SessionMessage implements \JsonSerializable
 
     private const JSON_CLASS_VALUE = self::class;
 
+    private const TOASTR_TYPES = ['success', 'error', 'warning', 'info'];
+
     public function __construct(
         protected string $title = '',
         protected string $message = '',
@@ -30,6 +32,11 @@ class SessionMessage implements \JsonSerializable
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getToastrType(): string
+    {
+        return in_array($this->title, self::TOASTR_TYPES, true) ? $this->title : 'info';
     }
 
     public function getMessage(): string
