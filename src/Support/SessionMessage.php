@@ -82,9 +82,9 @@ class SessionMessage implements \JsonSerializable
             && ($value[self::JSON_CLASS_KEY] ?? null) === self::JSON_CLASS_VALUE
         ) {
             return new static(
-                $value['title'] ?? '',
-                $value['message'] ?? '',
-                $value['options'] ?? [],
+                is_string($value['title'] ?? null) ? $value['title'] : '',
+                is_string($value['message'] ?? null) ? $value['message'] : '',
+                is_array($value['options'] ?? null) ? $value['options'] : [],
             );
         }
 

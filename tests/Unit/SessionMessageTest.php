@@ -159,4 +159,34 @@ class SessionMessageTest extends TestCase
         $this->assertSame('', $restored->getMessage());
         $this->assertSame([], $restored->getOptions());
     }
+
+    public function test_try_from_ignores_non_string_title_and_message(): void
+    {
+        $restored = SessionMessage::tryFrom([
+            '__dcat_class' => 'Dcat\Admin\Support\SessionMessage',
+            'title'   => ['injected'],
+            'message' => 42,
+            'options' => ['timeOut' => 3000],
+        ]);
+
+        $this->assertNotNull($restored);
+        $this->assertSame('', $restored->getTitle());
+        $this->assertSame('', $restored->getMessage());
+        $this->assertSame(['timeOut' => 3000], $restored->getOptions());
+    }
+
+    public function test_try_from_ignores_non_array_options(): void
+    {
+        $restored = SessionMessage::tryFrom([
+            '__dcat_class' => 'Dcat\Admin\Support\SessionMessage',
+            'title'   => 'info',
+            'message' => 'hello',
+            'options' => 'not-an-array',
+        ]);
+
+        $this->assertNotNull($restored);
+        $this->assertSame('info', $restored->getTitle());
+        $this->assertSame('hello', $restored->getMessage());
+        $this->assertSame([], $restored->getOptions());
+    }
 }
