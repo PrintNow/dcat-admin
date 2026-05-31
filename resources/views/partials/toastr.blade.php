@@ -1,6 +1,5 @@
-@if(Session::has('dcat-admin-toastr'))
+@if($toastr = \Dcat\Admin\Support\SessionMessage::tryFrom(Session::get('dcat-admin-toastr')))
     @php
-        $toastr  = Session::get('dcat-admin-toastr');
         $type    = $toastr->getTitle();
         $message = $toastr->getMessage();
         $options = admin_javascript_json($toastr->getOptions());
