@@ -5,6 +5,7 @@ use Dcat\Admin\Support\Helper;
 use Dcat\Admin\Support\SessionMessage;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 if (! function_exists('admin_setting')) {

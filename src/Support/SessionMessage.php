@@ -9,7 +9,7 @@ namespace Dcat\Admin\Support;
  * 1. Laravel 13 中 MessageBag 通过 redirect()->with() 序列化后变为数组的问题
  * 2. session.serialization = json 时，protected 属性不会被 json_encode 包含的问题
  */
-class SessionMessage implements \JsonSerializable
+final class SessionMessage implements \JsonSerializable
 {
     private const JSON_CLASS_KEY = '__dcat_class';
 
@@ -24,9 +24,9 @@ class SessionMessage implements \JsonSerializable
     ) {
     }
 
-    public static function make(string $title, string $message = '', array $options = []): static
+    public static function make(string $title, string $message = '', array $options = []): self
     {
-        return new static($title, $message, $options);
+        return new self($title, $message, $options);
     }
 
     public function getTitle(): string
@@ -71,9 +71,9 @@ class SessionMessage implements \JsonSerializable
      * - PHP 序列化（session.serialization = php）：值已经是 SessionMessage 对象
      * - JSON 序列化（session.serialization = json）：值是带类型标识的数组
      */
-    public static function tryFrom(mixed $value): ?static
+    public static function tryFrom(mixed $value): ?self
     {
-        if ($value instanceof static) {
+        if ($value instanceof self) {
             return $value;
         }
 
@@ -81,7 +81,7 @@ class SessionMessage implements \JsonSerializable
             is_array($value)
             && ($value[self::JSON_CLASS_KEY] ?? null) === self::JSON_CLASS_VALUE
         ) {
-            return new static(
+            return new self(
                 is_string($value['title'] ?? null) ? $value['title'] : '',
                 is_string($value['message'] ?? null) ? $value['message'] : '',
                 is_array($value['options'] ?? null) ? $value['options'] : [],
