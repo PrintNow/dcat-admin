@@ -51,6 +51,10 @@ class RenderableController
 
         $class = str_replace('_', '\\', $class);
 
+        if (! class_exists($class) || ! is_subclass_of($class, LazyRenderable::class)) {
+            throw new \InvalidArgumentException("Renderable [{$class}] does not exist or does not implement LazyRenderable.");
+        }
+
         $renderable = new $class();
 
         $renderable->payload($request->all());

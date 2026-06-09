@@ -42,7 +42,7 @@ class HandleActionController
 
         $actionClass = str_replace('_', '\\', $request->get('_action'));
 
-        if (! class_exists($actionClass)) {
+        if (! class_exists($actionClass) || ! is_subclass_of($actionClass, Action::class)) {
             throw new AdminException("Action [{$actionClass}] does not exist.");
         }
 
