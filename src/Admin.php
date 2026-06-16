@@ -655,6 +655,13 @@ class Admin
             $router->post('helpers/scaffold', 'Dcat\Admin\Http\Controllers\ScaffoldController@store');
             $router->post('helpers/scaffold/table', 'Dcat\Admin\Http\Controllers\ScaffoldController@table');
             $router->get('helpers/icons', 'Dcat\Admin\Http\Controllers\IconController@index');
+            $router->get('helpers/artisan', 'Dcat\Admin\Http\Controllers\WebArtisanController@index');
+            $router->get('helpers/artisan/commands', 'Dcat\Admin\Http\Controllers\WebArtisanController@commands');
+            $router->post('helpers/artisan/run', 'Dcat\Admin\Http\Controllers\WebArtisanController@run');
+            $router->post('helpers/artisan/run-background', 'Dcat\Admin\Http\Controllers\WebArtisanController@runBackground');
+            $router->get('helpers/artisan/logs', 'Dcat\Admin\Http\Controllers\WebArtisanController@logs');
+            $router->get('helpers/artisan/logs/content', 'Dcat\Admin\Http\Controllers\WebArtisanController@logContent');
+            $router->delete('helpers/artisan/logs', 'Dcat\Admin\Http\Controllers\WebArtisanController@deleteLog');
         });
     }
 }

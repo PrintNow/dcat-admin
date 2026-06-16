@@ -37,6 +37,13 @@ class Menu
             'uri'       => 'helpers/icons',
             'parent_id' => 1,
         ],
+        [
+            'id'        => 5,
+            'title'     => 'Web Artisan',
+            'icon'      => '',
+            'uri'       => 'helpers/artisan',
+            'parent_id' => 1,
+        ],
     ];
 
     protected $view = 'admin::partials.menu';

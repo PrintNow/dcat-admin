@@ -208,7 +208,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'helpers' => [
-        'enable' => true,
+        'enable'  => true,
+        'artisan' => [
+            'log_max_count'     => 50,
+            'log_ttl_hours'     => 24,
+            'command_blacklist' => [],
+        ],
     ],
 
     /*
