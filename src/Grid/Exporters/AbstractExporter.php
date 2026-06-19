@@ -221,20 +221,20 @@ abstract class AbstractExporter implements ExporterInterface
      * @param  Collection  $data
      * @return array
      */
-    protected function normalize(Collection $data)
+    protected function normalize(Collection $data): array
     {
-        $data = $data->toArray();
-        foreach ($data as &$row) {
-            $row = Arr::dot($row);
-
+        $result = [];
+        foreach ($data as $item) {
+            $row = Arr::dot((array) $item);
             foreach ($row as &$v) {
                 if (is_array($v) || is_object($v)) {
                     $v = json_encode($v, JSON_UNESCAPED_UNICODE);
                 }
             }
+            $result[] = $row;
         }
 
-        return $data;
+        return $result;
     }
 
     /**
