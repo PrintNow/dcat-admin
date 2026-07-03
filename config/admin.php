@@ -112,8 +112,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | The version string appended to JS/CSS URLs as a cache-busting query
-    | parameter (e.g. `?v1.0.0`). Defaults to the framework version. Set to
-    | null/empty to disable the version query entirely.
+    | parameter (e.g. `?v1.0.0`). When null (env not set), falls back to the
+    | framework version. Set to an empty string ('') to disable the version
+    | query entirely.
     |
     */
     'assets_version' => env('ADMIN_ASSETS_VERSION'),
