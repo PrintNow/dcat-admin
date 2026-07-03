@@ -23,7 +23,7 @@
 @include('admin::form.select-script')
 
 <script>
-$('.{{$selector}}').off('change.select2').on('change.select2', function () {
+$('.{{$selector}}').off('change.dcat-msel').on('change.dcat-msel', function () {
     $(this).closest('.field').find('input[type="hidden"][name="{{$name}}[]"]').prop('disabled', $(this).val()?.length > 0);
 });
 </script>

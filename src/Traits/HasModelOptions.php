@@ -12,17 +12,19 @@ trait HasModelOptions
      * Load options from current selected resource(s).
      *
      * @param  string  $model
-     * @param  string  $idField
+     * @param  string|null  $idField 默认取模型主键
      * @param  string  $textField
      * @return $this
      */
-    public function model($model, string $idField = 'id', string $textField = 'name')
+    public function model($model, ?string $idField = null, string $textField = 'name')
     {
         if (! class_exists($model)
-            || ! in_array(Model::class, class_parents($model))
+            || ! in_array(Model::class, class_parents($model), true)
         ) {
             throw new RuntimeException("[$model] must be a valid model class");
         }
+
+        $idField ??= (new $model())->getKeyName();
 
         $this->options = function ($value) use ($model, $idField, $textField) {
             if (empty($value)) {
