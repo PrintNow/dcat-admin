@@ -2,12 +2,17 @@
 
 namespace Dcat\Admin\Support;
 
+use Illuminate\Contracts\Support\MessageBag;
+
 /**
  * Session 消息对象（兼容 Laravel 10-13，兼容 PHP session.serialization = json/php）.
  *
  * 解决两类问题：
  * 1. Laravel 13 中 MessageBag 通过 redirect()->with() 序列化后变为数组的问题
  * 2. session.serialization = json 时，protected 属性不会被 json_encode 包含的问题
+ *
+ * 同时向后兼容旧契约：外部代码直接 flash 的 MessageBag（实例或其序列化数组）
+ * 仍可被 tryFrom() 识别，不会被静默丢弃。
  */
 final class SessionMessage implements \JsonSerializable
 {
@@ -67,9 +72,11 @@ final class SessionMessage implements \JsonSerializable
     /**
      * 从 session 中读取的值尝试构造实例.
      *
-     * 兼容两种情况：
+     * 兼容以下情况：
      * - PHP 序列化（session.serialization = php）：值已经是 SessionMessage 对象
      * - JSON 序列化（session.serialization = json）：值是带类型标识的数组
+     * - 旧契约：外部代码直接 flash 的 MessageBag 实例，或其序列化后的数组
+     *   （形如 ['title' => ['x'], 'message' => ['y']]）
      */
     public static function tryFrom(mixed $value): ?self
     {
@@ -77,10 +84,15 @@ final class SessionMessage implements \JsonSerializable
             return $value;
         }
 
-        if (
-            is_array($value)
-            && ($value[self::JSON_CLASS_KEY] ?? null) === self::JSON_CLASS_VALUE
-        ) {
+        if ($value instanceof MessageBag) {
+            $value = $value->getMessages();
+        }
+
+        if (! is_array($value)) {
+            return null;
+        }
+
+        if (($value[self::JSON_CLASS_KEY] ?? null) === self::JSON_CLASS_VALUE) {
             return new self(
                 is_string($value['title'] ?? null) ? $value['title'] : '',
                 is_string($value['message'] ?? null) ? $value['message'] : '',
@@ -88,6 +100,29 @@ final class SessionMessage implements \JsonSerializable
             );
         }
 
-        return null;
+        return self::tryFromMessageBagArray($value);
+    }
+
+    /**
+     * 尝试按 MessageBag 序列化数组的形态构造实例（title/message 值为字符串数组）.
+     */
+    private static function tryFromMessageBagArray(array $value): ?self
+    {
+        if (
+            (! isset($value['title']) && ! isset($value['message']))
+            || ! is_array($value['title'] ?? [])
+            || ! is_array($value['message'] ?? [])
+        ) {
+            return null;
+        }
+
+        $title = $value['title'][0] ?? '';
+        $message = $value['message'][0] ?? '';
+
+        if (! is_string($title) || ! is_string($message)) {
+            return null;
+        }
+
+        return new self($title, $message);
     }
 }
