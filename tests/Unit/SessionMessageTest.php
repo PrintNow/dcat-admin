@@ -189,4 +189,54 @@ class SessionMessageTest extends TestCase
         $this->assertSame('hello', $restored->getMessage());
         $this->assertSame([], $restored->getOptions());
     }
+
+    // -----------------------------------------------------------------------
+    // tryFrom — 旧契约 MessageBag 兼容
+    // -----------------------------------------------------------------------
+
+    public function test_try_from_accepts_legacy_message_bag_instance(): void
+    {
+        $bag = new \Illuminate\Support\MessageBag([
+            'title'   => '操作成功',
+            'message' => '记录已保存',
+        ]);
+
+        $restored = SessionMessage::tryFrom($bag);
+
+        $this->assertNotNull($restored);
+        $this->assertSame('操作成功', $restored->getTitle());
+        $this->assertSame('记录已保存', $restored->getMessage());
+    }
+
+    public function test_try_from_accepts_legacy_message_bag_serialized_array(): void
+    {
+        $bag = new \Illuminate\Support\MessageBag([
+            'title'   => '操作成功',
+            'message' => '记录已保存',
+        ]);
+        $array = json_decode(json_encode($bag), true);
+
+        $restored = SessionMessage::tryFrom($array);
+
+        $this->assertNotNull($restored);
+        $this->assertSame('操作成功', $restored->getTitle());
+        $this->assertSame('记录已保存', $restored->getMessage());
+    }
+
+    public function test_try_from_accepts_message_bag_with_only_title(): void
+    {
+        $restored = SessionMessage::tryFrom(['title' => ['仅标题']]);
+
+        $this->assertNotNull($restored);
+        $this->assertSame('仅标题', $restored->getTitle());
+        $this->assertSame('', $restored->getMessage());
+    }
+
+    public function test_try_from_rejects_message_bag_shaped_array_with_non_string_values(): void
+    {
+        $this->assertNull(SessionMessage::tryFrom([
+            'title'   => [['nested']],
+            'message' => ['hi'],
+        ]));
+    }
 }
