@@ -689,9 +689,10 @@ class Asset
             $url .= '?';
         }
 
-        $assetsVersion = config('admin.assets_version', Admin::VERSION);
+        // 键存在但为 null（env 未设置）时回退框架版本；显式置空才禁用版本参数
+        $assetsVersion = config('admin.assets_version') ?? Admin::VERSION;
 
-        if (! $assetsVersion) {
+        if ($assetsVersion === '' || $assetsVersion === false) {
             return rtrim($url, '?');
         }
 
