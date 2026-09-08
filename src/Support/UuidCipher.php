@@ -27,7 +27,7 @@ use Dcat\Admin\Contracts\UrlCipher;
  * ③ 主键（5 字节）：主键自身的 5 字节大端表示（uint40，字节序 高→低），
  *    仅支持正整数 1 ~ 0xFFFFFFFFFF（约 1.1 万亿）；
  * ④ 16 字节整体走 AES-256-ECB 加密（OPENSSL_ZERO_PADDING，数据恰好一块）；
- * ⑤ bin2hex 后按 8-4-4-4-12 拼成标准 UUID 字符串。
+ * ⑤ bin2hex 后统一转大写，再按 8-4-4-4-12 拼成标准 UUID 字符串。
  *
  * 解密为逆过程：AES 解密 → 校验魔数 == 配置值 → 校验标签非空 → 还原主键。
  * 任何一步失败/格式非法 → 返回 null（由调用方决定是否回退明文）。
@@ -117,8 +117,10 @@ class UuidCipher implements UrlCipher
             throw new \RuntimeException('UuidCipher AES 加密失败，请检查 admin.route.cipher_salt 配置');
         }
 
-        // 3. 32 位 hex 按 8-4-4-4-12 拼成 UUID 字符串
-        $hex = bin2hex($cipherRaw);
+        // 3. 32 位 hex 统一转大写后按 8-4-4-4-12 拼成 UUID 字符串
+        //    （bin2hex 原生输出小写；转大写后 URL 与页面显示一致；
+        //     解密侧 ctype_xdigit / hex2bin 兼容大小写，新旧密文均可解）
+        $hex = strtoupper(bin2hex($cipherRaw));
 
         return implode('-', [
             substr($hex, 0, 8),
