@@ -77,12 +77,11 @@ php artisan admin:install
 
 ## 扩展包
 
-| 扩展 | 描述 | dcat-admin 版本 |
-| --- | --- |---------------|
-| [zgy-dcat/wangeditor](https://github.com/gy23rm/dcat-wangeditor) | wangEditor 5 富文本编辑器表单字段 | dev-master    |
+| 扩展 | 描述                                           | dcat-admin 版本 |
+| --- |----------------------------------------------|---------------|
+| [zgy-dcat/wangeditor](https://github.com/gy23rm/dcat-wangeditor) | wangEditor 5 富文本编辑器表单字段                      | dev-master    |
 | [zgy-dcat/distpicker](https://github.com/gy23rm/dcat-distpicker) | 省市区三级联动（super-eggs/dcat-distpicker 的维护 fork） |dev-master           |
-
-安装：`composer require zgy-dcat/wangeditor` / `composer require zgy-dcat/distpicker`
+| [zgy-dcat/master-detail](https://github.com/gy23rm/dcat-master-detail) | 左树右表联动（Master-Detail）扩展                      |dev-master           |
 
 ## 免责声明
 
