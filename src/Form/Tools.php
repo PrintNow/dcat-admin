@@ -152,6 +152,10 @@ class Tools implements Renderable
     protected function getViewPath()
     {
         if ($key = $this->form->getResourceId()) {
+            if (config('admin.route.encrypt', false)) {
+                $key = admin_cipher_encrypt($key, 'fo');
+            }
+
             return $this->getListPath().'/'.$key;
         }
 

@@ -18,8 +18,14 @@ class QuickEdit extends RowAction
             ->success('Dcat.reload()')
             ->dimensions($width, $height);
 
+        $key = $this->getKey();
+
+        if (config('admin.route.encrypt', false)) {
+            $key = admin_cipher_encrypt($key, 'gi');
+        }
+
         return <<<HTML
-<a href="javascript:void(0);" data-url="{$this->resource()}/{$this->getKey()}/edit" class="tree-quick-edit"><i class="feather icon-edit"></i>&nbsp;</a>
+<a href="javascript:void(0);" data-url="{$this->resource()}/{$key}/edit" class="tree-quick-edit"><i class="feather icon-edit"></i>&nbsp;</a>
 HTML;
     }
 }

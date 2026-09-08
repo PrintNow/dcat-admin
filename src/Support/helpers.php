@@ -273,9 +273,75 @@ if (! function_exists('admin_url')) {
     }
 }
 
+if (! function_exists('admin_cipher_encrypt')) {
+    /**
+     * 加密一个 URL 参数值（仅支持正整数主键）.
+     *
+     * 强校验：
+     * - 仅接受正整数 int，0 / 负数一律抛异常（弱类型下字符串会先被 PHP 转 int 再进入）;
+     * - 作用域 $key 必填（缺参/传 null 是 TypeError）；空串也会抛异常（防产出无 scope 的密文）.
+     *
+     * @param  int  $plain
+     * @param  string  $key  作用域标识（如 grid.id / form.id），必填
+     * @return string
+     *
+     * @throws \InvalidArgumentException 传入非正整数，或未传作用域时抛出
+     */
+    function admin_cipher_encrypt(int $plain, string $key)
+    {
+        if ($plain <= 0) {
+            throw new \InvalidArgumentException('admin_cipher_encrypt 只支持正整数主键，传入了：'.var_export($plain, true));
+        }
+
+        if ($key === '') {
+            throw new \InvalidArgumentException('admin_cipher_encrypt 必须传入作用域 $key（1~2 个可打印 ASCII 字符，如 gi / fo / bo）');
+        }
+
+        return app('admin.cipher')->encrypt($plain, $key);
+    }
+}
+
+if (! function_exists('admin_cipher_decrypt')) {
+    /**
+     * 解密一个 URL 参数值，失败返回 null.
+     *
+     * 强校验：
+     * - 解密结果必须是正整数，0 / 负数 / 非数字一律返回 null（不解密）;
+     * - 作用域 $key 必填（缺参/传 null 是 TypeError，传空串抛 InvalidArgumentException）；
+     * - UuidCipher / CryptCipher 解密时都会校验与密文内嵌 scope 一致，不一致返回 null
+     *   （防跨场景重放）；页面访问走中间件，控制器配置 cipherScope 时以它为唯一可接受
+     *   作用域，密文标签不一致 → 解密失败 → 404。
+     *
+     * 注：底层 cipher 只会返回纯数字字符串（如 '42'），+0 转 int 后 is_int 恒真；
+     * 若自定义 cipher 返回了非纯数字（如 '42abc'），PHP 弱类型 +0 会截断为 42，
+     * 这里一律按「非正整数」处理返回 null（不信任自定义返回）.
+     *
+     * @param  string  $cipher
+     * @param  string  $key  作用域短标签（1~2 个可打印 ASCII 字符，如 gi / fo / bo），必填；需与加密时的 scope 一致
+     * @return string|null
+     *
+     * @throws \InvalidArgumentException 未传作用域时抛出
+     */
+    function admin_cipher_decrypt(string $cipher, string $key): ?string
+    {
+        if ($key === '') {
+            throw new \InvalidArgumentException('admin_cipher_decrypt 必须传入作用域 $key（1~2 个可打印 ASCII 字符，如 gi / fo / bo）');
+        }
+
+        $plain = app('admin.cipher')->decrypt($cipher, $key);
+
+        // 解密结果必须为正整数：0 / 负数 / 非数字一律返回 null（不解密）
+        if ($plain === null || ! is_int($plain + 0) || $plain <= 0) {
+            return null;
+        }
+
+        return $plain;
+    }
+}
+
 if (! function_exists('admin_base_path')) {
     /**
-     * Get admin url.
+     * Get admin base path.
      *
      * @param  string  $path
      * @return string

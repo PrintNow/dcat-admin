@@ -3,6 +3,7 @@
 namespace Dcat\Admin;
 
 use Dcat\Admin\Contracts\ExceptionHandler;
+use Dcat\Admin\Support\UrlCipherManager;
 use Dcat\Admin\Exception\Handler;
 use Dcat\Admin\Extend\Manager;
 use Dcat\Admin\Extend\UpdateManager;
@@ -65,6 +66,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected $routeMiddleware = [
         'admin.auth'       => Http\Middleware\Authenticate::class,
+        'admin.cipher'     => Http\Middleware\Cipher::class,
         'admin.pjax'       => Http\Middleware\Pjax::class,
         'admin.permission' => Http\Middleware\Permission::class,
         'admin.bootstrap'  => Http\Middleware\Bootstrap::class,
@@ -78,6 +80,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected $middlewareGroups = [
         'admin' => [
+            'admin.cipher',
             'admin.auth',
             'admin.pjax',
             'admin.bootstrap',
@@ -236,6 +239,28 @@ class AdminServiceProvider extends ServiceProvider
         $this->app->singleton('admin.web-uploader', WebUploader::class);
         $this->app->singleton(ExceptionHandler::class, config('admin.exception_handler') ?: Handler::class);
         $this->app->singleton('admin.translator', Translator::class);
+
+        $this->registerUrlCipher();
+    }
+
+    /**
+     * 注册 URL 参数加解密服务.
+     *
+     * 容器中的 `admin.cipher` 绑定的是 {@see \Dcat\Admin\Support\UrlCipherManager}，
+     * 它封装了单值加解密、开关判断等能力；
+     * 底层加解密实现默认为 {@see \Dcat\Admin\Support\CryptCipher}
+     * （配置盐混淆版，未配置盐时抛异常），
+     * 可通过配置项 `admin.route.cipher` 指定自定义 {@see \Dcat\Admin\Contracts\UrlCipher} 实现。
+     */
+    protected function registerUrlCipher()
+    {
+        $this->app->singleton('admin.cipher', function ($app) {
+            $class = config('admin.route.cipher', \Dcat\Admin\Support\CryptCipher::class);
+
+            return new UrlCipherManager($app->make($class));
+        });
+
+        $this->app->alias('admin.cipher', UrlCipherManager::class);
     }
 
     public function registerExtensions()

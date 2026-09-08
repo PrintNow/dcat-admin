@@ -24,16 +24,11 @@ class SwitchDisplay extends AbstractDisplayer
         $column = $this->column->getName();
         $checked = $this->value ? 'checked' : '';
         $color = $this->color ?: Admin::color()->primary();
-        $url = $this->url();
+        $url = $this->cipherUrl();
 
         return Admin::view(
             'admin::grid.displayer.switch',
             compact('column', 'color', 'refresh', 'checked', 'url')
         );
-    }
-
-    protected function url()
-    {
-        return $this->resource().'/'.$this->getKey();
     }
 }

@@ -23,6 +23,12 @@ class Show extends RowAction
      */
     public function href()
     {
-        return $this->parent->urlWithConstraints("{$this->resource()}/{$this->getKey()}");
+        $key = $this->getKey();
+
+        if (config('admin.route.encrypt', false)) {
+            $key = admin_cipher_encrypt($key, 'gi');
+        }
+
+        return $this->parent->urlWithConstraints("{$this->resource()}/{$key}");
     }
 }

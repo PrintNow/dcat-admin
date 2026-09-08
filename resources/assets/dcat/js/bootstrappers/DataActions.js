@@ -49,7 +49,9 @@ let defaultActions = {
             if (! keys.length) {
                 return;
             }
-            let msg = 'ID - ' + keys.join(', ');
+
+            // 不展示明文主键（批量删除确认弹窗文案置空）
+            let msg = '';
 
             Dcat.confirm(lang.delete_confirm, msg, function () {
                 Dcat.NP.start();

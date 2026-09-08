@@ -9,12 +9,16 @@ class Delete extends RowAction
     public function html()
     {
         $url = request()->fullUrl();
+        $key = $this->getKey();
+
+        if (config('admin.route.encrypt', false)) {
+            $key = admin_cipher_encrypt($key, 'gi');
+        }
 
         return <<<HTML
 <a href="javascript:void(0);" 
-    data-message="ID - {$this->getKey()}" 
     data-redirect="{$url}"
-    data-url="{$this->resource()}/{$this->getKey()}" data-action="delete"><i class="feather icon-trash"></i>&nbsp;</a>
+    data-url="{$this->resource()}/{$key}" data-action="delete"><i class="feather icon-trash"></i>&nbsp;</a>
 HTML;
     }
 }
