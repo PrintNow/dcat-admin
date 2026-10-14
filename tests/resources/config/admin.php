@@ -277,14 +277,14 @@ return [
     | This value is the layout of admin pages.
     */
     'layout' => [
-        // default, blue, blue-light, green
+        // default, blue, blue-light, green, indigo, navy, emerald, amber, midnight
         'color' => 'default',
 
         'body_class' => '',
 
         'sidebar_collapsed' => false,
 
-        // light, primary, dark
+        // light, primary, dark, indigo, navy, emerald, amber, midnight
         'sidebar_style' => 'light',
 
         'dark_mode_switch' => false,

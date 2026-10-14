@@ -8,6 +8,7 @@ use Dcat\Admin\Contracts\Repository;
 use Dcat\Admin\Exception\InvalidArgumentException;
 use Dcat\Admin\Http\Controllers\AuthController;
 use Dcat\Admin\Http\JsonResponse;
+use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Menu;
 use Dcat\Admin\Layout\Navbar;
 use Dcat\Admin\Layout\SectionManager;
@@ -537,6 +538,7 @@ class Admin
         }
 
         $sidebarStyle = config('admin.layout.sidebar_style') ?: 'light';
+        $sidebarClass = Content::sidebarStyleClass($sidebarStyle);
 
         $pjaxId = static::getPjaxContainerId();
 
@@ -546,7 +548,8 @@ class Admin
         $jsVariables['colors'] = static::color()->all();
         $jsVariables['dark_mode'] = static::isDarkMode();
         $jsVariables['sidebar_dark'] = config('admin.layout.sidebar_dark') || ($sidebarStyle === 'dark');
-        $jsVariables['sidebar_light_style'] = in_array($sidebarStyle, ['dark', 'light'], true) ? 'sidebar-light-primary' : 'sidebar-primary';
+        // 暗黑模式切回浅色时要恢复的类，必须与实际渲染出来的类一致，否则会残留类名
+        $jsVariables['sidebar_light_style'] = $sidebarClass === 'sidebar-dark-white' ? 'sidebar-light-primary' : $sidebarClass;
 
         return admin_javascript_json($jsVariables);
     }

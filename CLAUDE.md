@@ -91,6 +91,8 @@ php artisan admin:menu-cache
 
 前端资源通过 Laravel Mix（`webpack.mix.js`）编译。源文件在 `resources/assets/`，编译产物在 `resources/dist/`。前端技术栈为 AdminLTE 3、Bootstrap 4、jQuery 3，内置多个插件（editor-md、webuploader、datetimepicker、fontawesome-iconpicker 等）。
 
+主题（`layout.color`，含 `indigo`/`navy`/`emerald`/`amber`/`midnight` 等 9 套）与侧边栏样式（`layout.sidebar_style`，含 5 种实色侧边栏）的机制、色值表和新增主题的步骤见 [`docs/主题与侧边栏样式.md`](docs/主题与侧边栏样式.md)。重新编译全部主题：`php artisan admin:minify all`，随后 `php artisan admin:publish --assets` 发布。
+
 ### 国际化
 
 语言包目录：`resources/lang/`，包含 `en`、`zh_CN`、`zh_TW` 三种语言。

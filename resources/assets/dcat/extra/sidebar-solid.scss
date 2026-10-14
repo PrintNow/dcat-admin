@@ -1,0 +1,62 @@
+// ================================================================================================
+//  File Name: sidebar-solid.scss
+//  Description: 实色侧边栏样式（与主题无关，任何主题下都可用）
+//  ----------------------------------------------------------------------------------------------
+//  对应后台配置 config('admin.layout.sidebar_style') 的取值：
+//    'indigo'   晨曦靛蓝（方案A 主色 #4F5FBA）
+//    'navy'     深海军蓝（方案B 侧边栏 #0F1E3D）
+//    'emerald'  翡翠清新（方案C 主色 #0FA868）
+//    'amber'    落日暖橙（方案D 主色 #F26B1D）
+//    'midnight' 极夜深色（方案E 侧边栏 #16181D）
+//
+//  样式名到 CSS 类的映射见 `src/Layout/Content.php` 的 SIDEBAR_STYLE_CLASSES。
+//  色值是设计稿里的固定色，不随 `layout.color` 主题变化，所以单独打包成一份
+//  与主题无关的 CSS（`resources/dist/dcat/extra/sidebar-solid.css`），
+//  避免重复进 9 份主题 CSS。
+// ================================================================================================
+
+$sidebar-solid-palette: (
+  'indigo':   #4f5fba, // 方案A 晨曦靛蓝（主色）
+  'navy':     #0f1e3d, // 方案B 深海军蓝（侧边栏）
+  'emerald':  #0fa868, // 方案C 翡翠清新（主色）
+  'amber':    #f26b1d, // 方案D 落日暖橙（主色）
+  'midnight': #16181d, // 方案E 极夜深色（侧边栏）
+);
+
+@mixin sidebar-solid($bg, $fg: #fff) {
+  background-color: $bg!important;
+
+  .navbar-header .logo-mini,
+  .navbar-header .logo-lg,
+  .nav-treeview > .nav-item > .nav-link,
+  .sidebar a {
+    color: $fg;
+  }
+
+  .nav-pills .nav-link:not(.active):hover {
+    color: $fg;
+  }
+
+  .nav.nav-pills .nav-item .nav-link.active,
+  .nav-treeview > .nav-item > .nav-link.active,
+  .nav-treeview > .nav-item > .nav-link:hover {
+    font-weight: bold;
+    border-bottom: 1px solid $fg;
+  }
+
+  .nav-item > .nav-link i {
+    margin-right: .71rem;
+    font-size: 1.2rem;
+  }
+
+  .nav-treeview > .nav-item > .nav-link i {
+    margin-right: .65rem;
+    margin-left: 3px;
+  }
+}
+
+@each $name, $bg in $sidebar-solid-palette {
+  .main-sidebar.sidebar-#{$name} {
+    @include sidebar-solid($bg);
+  }
+}
