@@ -1576,6 +1576,19 @@ class Form implements Renderable
     }
 
     /**
+     * 设置提交按钮文字
+     *
+     * @param  string  $text
+     * @return $this
+     */
+    public function submitButtonText(string $text)
+    {
+        $this->builder->footer()->submitButtonText($text);
+
+        return $this;
+    }
+
+    /**
      * Footer setting for form.
      *
      * @param  Closure  $callback
