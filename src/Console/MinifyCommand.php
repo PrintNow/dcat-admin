@@ -76,10 +76,11 @@ class MinifyCommand extends Command
             'accent'     => '#fba05c',
         ],
         'midnight' => [
-            'body_bg'         => '#101214',
-            'font_color'      => '#f6f6f6',
+            // 只提供「青色主色 + 近黑侧边栏」；页面底/文字色保持框架默认。
+            // 想要整站深色请用 dcat 的 dark mode（应用侧 body_class 加 'dark-mode'），
+            // 不要在这里翻 $body-bg/$font-color：组件底色（.box/.card/按钮等）是写死的浅色，
+            // 翻了会出现"近白文字落在白色卡片上"的不可用效果。
             'sidebar_dark_bg' => '#16181d',
-            'tint'            => '#233e50',
         ],
     ];
 
