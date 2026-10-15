@@ -95,6 +95,8 @@ php artisan admin:menu-cache
 
 主题（`layout.color`，含 `indigo`/`navy`/`emerald`/`amber`/`midnight` 等 9 套）与侧边栏样式（`layout.sidebar_style`，含 5 种实色侧边栏）的机制、色值表和新增主题的步骤见 [`docs/主题与侧边栏样式.md`](docs/主题与侧边栏样式.md)。重新编译全部主题：`php artisan admin:minify all`，随后 `php artisan admin:publish --assets` 发布。
 
+> ⚠️ **发布资源要加 `--force`**：`php artisan admin:publish --assets` 默认**跳过已存在的文件**，改了 CSS/JS 后不加 `--force`（或先删掉 `public/vendor/dcat-admin/` 下对应的旧文件）不会覆盖，页面上会一直是旧资源。
+
 ### 国际化
 
 语言包目录：`resources/lang/`，包含 `en`、`zh_CN`、`zh_TW` 三种语言。

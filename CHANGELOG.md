@@ -53,3 +53,4 @@
 
 - `resources/dist/` 是随包发布的预编译产物（提交进仓库）；`resources/pre-dist/` 是开发构建产物（已 gitignore）。
 - 内置第三方代码与资源保留其原始署名与许可证（见 `LICENSE`、`fonts/`、`resources/assets/dcat/plugins/`）。
+- 应用侧发布资源请用 `php artisan admin:publish --assets --force`：该命令默认**跳过已存在的文件**，改了 CSS/JS 后不加 `--force`（或先删旧文件）不会覆盖。
