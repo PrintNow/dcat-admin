@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Dcat Admin（`zgy-dcat/laravel-admin`）是一个 Laravel 后台管理面板构建包，是 `jqhph/dcat-admin` 的永久维护分支。提供快速 CRUD 脚手架，包含数据表格、表单、详情页、树形结构、RBAC 权限管理和插件系统。前端基于 AdminLTE 3 + Bootstrap 4 + jQuery 3。
+Dcat Admin（`zgy-dcat/laravel-admin`）是一个 Laravel 后台管理面板构建包，是 `PrintNow/dcat-admin` 的永久维护分支。提供快速 CRUD 脚手架，包含数据表格、表单、详情页、树形结构、RBAC 权限管理和插件系统。前端基于 AdminLTE 3 + Bootstrap 4 + jQuery 3。
 
 支持 Laravel 10/11/12，PHP 8.1–8.4。
 

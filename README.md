@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Laravel-10~13-59a9f8.svg?style=flat" />
 </p>
 
-[jqhph/dcat-admin](https://github.com/jqhph/dcat-admin) 的永久维护 fork。原项目已停止维护，本项目持续跟进 Laravel / PHP 新版本兼容、安全修复和功能增强。
+[PrintNow/dcat-admin](https://github.com/PrintNow/dcat-admin) 的永久维护 fork。原项目已停止维护，本项目持续跟进 Laravel / PHP 新版本兼容、安全修复和功能增强。
 
 ## 兼容性
 
