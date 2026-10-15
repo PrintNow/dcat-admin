@@ -77,13 +77,18 @@ class RoleController extends AdminController
 
     public function form()
     {
+        // 捕获控制器引用：表单事件（saved/saving 等）闭包会被 bind 到模型，
+        // 直接写 $this 会变成 Role::xxx() 导致 undefined method；
+        // 通过 use 捕获的 $controller 始终指向控制器实例。
+        $controller = $this;
+
         $with = ['permissions'];
 
         if ($bindMenu = config('admin.menu.role_bind_menu', true)) {
             $with[] = 'menus';
         }
 
-        return Form::make(Role::with($with), function (Form $form) use ($bindMenu) {
+        return Form::make(Role::with($with), function (Form $form) use ($bindMenu, $controller) {
             $roleTable = config('admin.database.roles_table');
             $connection = config('admin.database.connection');
 
@@ -125,8 +130,8 @@ class RoleController extends AdminController
             if ($id == $roleModel::ADMINISTRATOR_ID) {
                 $form->disableDeleteButton();
             }
-        })->saved(function () {
-            $this->flushMenuCache();
+        })->saved(function () use ($controller) {
+            $controller->flushMenuCache();
         });
     }
 

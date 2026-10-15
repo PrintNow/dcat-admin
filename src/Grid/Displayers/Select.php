@@ -15,14 +15,9 @@ class Select extends AbstractDisplayer
         return Admin::view('admin::grid.displayer.select', [
             'column'  => $this->column->getName(),
             'value'   => $this->value,
-            'url'     => $this->url(),
+            'url'     => $this->cipherUrl(),
             'options' => $options,
             'refresh' => $refresh,
         ]);
-    }
-
-    protected function url()
-    {
-        return $this->resource().'/'.$this->getKey();
     }
 }

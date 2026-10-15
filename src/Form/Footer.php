@@ -50,6 +50,13 @@ class Footer implements Renderable
     protected $defaultcheckeds = ['view' => false, 'continue_editing' => false, 'continue_creating' => false];
 
     /**
+     * Submit button text.
+     *
+     * @var string|null
+     */
+    protected $submitButtonText;
+
+    /**
      * Footer constructor.
      *
      * @param  Builder  $builder
@@ -57,6 +64,19 @@ class Footer implements Renderable
     public function __construct(Builder $builder)
     {
         $this->builder = $builder;
+    }
+
+    /**
+     * 设置提交按钮文字
+     *
+     * @param  string  $text
+     * @return $this
+     */
+    public function submitButtonText(string $text)
+    {
+        $this->submitButtonText = $text;
+
+        return $this;
     }
 
     /**
@@ -232,6 +252,7 @@ class Footer implements Renderable
             'buttons'    => $this->buttons,
             'checkboxes' => $this->buildCheckboxes(),
             'width'      => $this->builder->getWidth(),
+            'submitButtonText' => $this->submitButtonText,
         ];
 
         $data = array_merge($data, $this->data);

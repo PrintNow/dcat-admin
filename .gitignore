@@ -10,3 +10,4 @@ pre-dist
 /laravel-tests
 *.bak.*
 .DS_Store
+*_TODO.md

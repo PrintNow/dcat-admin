@@ -36,6 +36,52 @@ class MinifyCommand extends Command
         'blue'        => '#6d8be6',
         'blue-light'  => '#62a8ea',
         'green'       => '#4e9876',
+        'indigo'      => '#4f5fba',
+        'navy'        => '#2e68ff',
+        'emerald'     => '#0fa868',
+        'amber'       => '#f26b1d',
+        'midnight'    => '#4cc9f0',
+    ];
+
+    /**
+     * 主题方案中「主色」之外的变量，构建时写入 `theme/_scheme.scss`.
+     *
+     * 键与 $colors 的主题名对应；未列出的键写 null（= 该主题不使用这个变量）。
+     *
+     * @var array
+     */
+    protected $schemes = [
+        'indigo' => [
+            'body_bg'   => '#f8f9fa',
+            'font_color' => '#1f2430',
+            'tint'      => '#eff0ff',
+            'accent'    => '#8b8cf5',
+        ],
+        'navy' => [
+            'body_bg'         => '#f2f5fa',
+            'sidebar_dark_bg' => '#0f1e3d',
+            'tint'            => '#e1e4e8',
+            'accent'          => '#5b8cff',
+        ],
+        'emerald' => [
+            'body_bg'    => '#f4faf7',
+            'font_color' => '#16342a',
+            'tint'       => '#e7f6ec',
+            'accent'     => '#3ed04a',
+        ],
+        'amber' => [
+            'body_bg'    => '#fbf5f0',
+            'font_color' => '#3a2a1e',
+            'tint'       => '#fdeee1',
+            'accent'     => '#fba05c',
+        ],
+        'midnight' => [
+            // 只提供「青色主色 + 近黑侧边栏」；页面底/文字色保持框架默认。
+            // 想要整站深色请用 dcat 的 dark mode（应用侧 body_class 加 'dark-mode'），
+            // 不要在这里翻 $body-bg/$font-color：组件底色（.box/.card/按钮等）是写死的浅色，
+            // 翻了会出现"近白文字落在白色卡片上"的不可用效果。
+            'sidebar_dark_bg' => '#16181d',
+        ],
     ];
 
     /**
@@ -124,6 +170,48 @@ class MinifyCommand extends Command
 
         $colorFile = $this->getColorFile();
         $this->files->put($colorFile, "\$primary: $color;");
+
+        $schemeFile = $this->getSchemeFile();
+        $this->files->put($schemeFile, $this->buildSchemeContents($name));
+    }
+
+    /**
+     * 生成主题方案变量文件内容.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function buildSchemeContents($name)
+    {
+        $scheme = $this->schemes[$name] ?? [];
+
+        // 这些变量在 scss 里已有默认值：只有本主题真的提供了才写入，
+        // 否则写成 null 会把默认值覆盖掉（$font-color 没有 !default，会导致文字色声明直接丢失）
+        $optional = [
+            'body_bg'         => '$body-bg',
+            'font_color'      => '$font-color',
+            'sidebar_dark_bg' => '$sidebar-dark-bg',
+        ];
+
+        // 这两个是主题方案新增的变量，必须始终声明，否则 `@if $scheme-tint` 会报未定义变量
+        $required = [
+            'tint'   => '$scheme-tint',
+            'accent' => '$scheme-accent',
+        ];
+
+        $contents = [];
+
+        foreach ($optional as $key => $variable) {
+            if (isset($scheme[$key])) {
+                $contents[] = sprintf('%s: %s;', $variable, $scheme[$key]);
+            }
+        }
+
+        foreach ($required as $key => $variable) {
+            $contents[] = sprintf('%s: %s;', $variable, $scheme[$key] ?? 'null');
+        }
+
+        return implode("\n", $contents)."\n";
     }
 
     /**
@@ -140,6 +228,10 @@ class MinifyCommand extends Command
 
         if (! is_file($this->getColorBakFile())) {
             $this->files->copy($this->getColorFile(), $this->getColorBakFile());
+        }
+
+        if (! is_file($this->getSchemeBakFile())) {
+            $this->files->copy($this->getSchemeFile(), $this->getSchemeBakFile());
         }
     }
 
@@ -164,6 +256,15 @@ class MinifyCommand extends Command
             $this->files->delete($colorFile);
             $this->files->copy($colorBakFile, $colorFile);
             $this->files->delete($colorBakFile);
+        }
+
+        $schemeFile = $this->getSchemeFile();
+        $schemeBakFile = $this->getSchemeBakFile();
+
+        if (is_file($schemeBakFile)) {
+            $this->files->delete($schemeFile);
+            $this->files->copy($schemeBakFile, $schemeFile);
+            $this->files->delete($schemeBakFile);
         }
     }
 
@@ -197,6 +298,22 @@ class MinifyCommand extends Command
     protected function getColorBakFile()
     {
         return str_replace('.scss', '.bak.scss', $this->getColorFile());
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getSchemeFile()
+    {
+        return $this->packagePath.'/resources/assets/dcat/sass/theme/_scheme.scss';
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getSchemeBakFile()
+    {
+        return str_replace('.scss', '.bak.scss', $this->getSchemeFile());
     }
 
     /**

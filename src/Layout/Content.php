@@ -15,6 +15,38 @@ class Content implements Renderable
     use HasBuilderEvents, Macroable;
 
     /**
+     * 侧边栏样式 => 实际输出的 CSS 类.
+     *
+     * 表中没有的值会**原样**作为 CSS 类名输出，因此也可以直接填写自定义类名。
+     * 注意 `dark` 有额外语义（切回浅色时不恢复浅色类），见 `Admin::jsVariables()`。
+     *
+     * @var array<string, string>
+     */
+    public const SIDEBAR_STYLE_CLASSES = [
+        'light'    => 'sidebar-light-primary',
+        'primary'  => 'sidebar-primary',
+        'dark'     => 'sidebar-dark-white',
+        'indigo'   => 'sidebar-indigo',
+        'navy'     => 'sidebar-navy',
+        'emerald'  => 'sidebar-emerald',
+        'amber'    => 'sidebar-amber',
+        'midnight' => 'sidebar-midnight',
+    ];
+
+    /**
+     * 解析侧边栏样式名对应的 CSS 类.
+     *
+     * @param  string|null  $style
+     * @return string
+     */
+    public static function sidebarStyleClass(?string $style): string
+    {
+        $style = $style ?: 'light';
+
+        return static::SIDEBAR_STYLE_CLASSES[$style] ?? $style;
+    }
+
+    /**
      * @var string
      */
     protected $view = 'admin::layouts.content';
@@ -445,7 +477,7 @@ class Content implements Renderable
             'theme'             => '',
             'footer_type'       => '',
             'body_class'        => [],
-            'sidebar_style'     => ['light' => 'sidebar-light-primary', 'primary' => 'sidebar-primary', 'dark' => 'sidebar-dark-white'],
+            'sidebar_style'     => static::SIDEBAR_STYLE_CLASSES,
             'sidebar_collapsed' => [],
             'navbar_color'      => [],
             'navbar_class'      => ['floating' => 'floating-nav', 'sticky' => 'fixed-top', 'hidden' => 'd-none'],

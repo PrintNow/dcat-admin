@@ -2,7 +2,7 @@
 /*
  * This file is part of the dcat-admin.
  *
- * (c) jqh <841324345@qq.com>
+ * (c) zgy <gy23rm@163.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.

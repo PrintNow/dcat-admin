@@ -22,7 +22,6 @@ class Delete extends RowAction
     {
         $this->setHtmlAttribute([
             'data-url'      => $this->url(),
-            'data-message'  => "ID - {$this->getKey()}",
             'data-action'   => 'delete',
             'data-redirect' => $this->redirectUrl(),
         ]);
@@ -37,6 +36,12 @@ class Delete extends RowAction
 
     public function url()
     {
-        return "{$this->resource()}/{$this->getKey()}";
+        $key = $this->getKey();
+
+        if (config('admin.route.encrypt', false)) {
+            $key = admin_cipher_encrypt($key, 'gi');
+        }
+
+        return "{$this->resource()}/{$key}";
     }
 }

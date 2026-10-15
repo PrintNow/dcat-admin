@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Dcat Admin（`printnow/laravel-admin`）是一个 Laravel 后台管理面板构建包，是 `jqhph/dcat-admin` 的永久维护分支。提供快速 CRUD 脚手架，包含数据表格、表单、详情页、树形结构、RBAC 权限管理和插件系统。前端基于 AdminLTE 3 + Bootstrap 4 + jQuery 3。
+Dcat Admin（`zgy-dcat/laravel-admin`）是一个 Laravel 后台管理面板构建包，是 `PrintNow/dcat-admin` 的永久维护分支。提供快速 CRUD 脚手架，包含数据表格、表单、详情页、树形结构、RBAC 权限管理和插件系统。前端基于 AdminLTE 3 + Bootstrap 4 + jQuery 3。
 
 支持 Laravel 10/11/12，PHP 8.1–8.4。
 
@@ -52,24 +52,26 @@ php artisan admin:menu-cache
 |---|---|
 | `Admin.php` | 主门面/服务单例 — 认证、菜单、导航栏、版本号、页面区域 |
 | `Grid.php` | 数据表格构建器，支持列定义、筛选器、导出、批量操作 |
-| `Form.php` | 表单构建器，67 种字段类型，支持嵌套表单、标签页、分步表单 |
+| `Form.php` | 表单构建器，各类字段类型（见 `Form/Field/`），支持嵌套表单、标签页、分步表单 |
 | `Show.php` | 详情/只读页面构建器 |
 | `Tree.php` | 树形结构展示构建器 |
 
 ### 关键子目录
 
-- **`Form/Field/`** — 67 种字段类型（Text、Select、Image、File、Editor、Date、HasMany、Embeds、KeyValue 等）
-- **`Grid/Filter/`** — 27 种筛选类型（Like、Equal、Between、Date、Scope、Group 等）
-- **`Grid/Displayers/`** — 30 种列展示渲染器（Badge、Editable、Image、QRCode、Copyable 等）
-- **`Http/Controllers/`** — 18 个控制器（Auth、Dashboard、User、Role、Permission、Menu、Scaffold 等）
-- **`Http/Middleware/`** — 7 个中间件：`admin.auth`、`admin.pjax`、`admin.permission`、`admin.bootstrap`、`admin.session`、`admin.upload`、`admin.app`
-- **`Console/`** — 22+ 个 Artisan 命令，模板文件在 `Console/stubs/`
+> 下面只列职责与代表类；各类的数量会随版本变化，需要准确数字直接看对应目录。
+
+- **`Form/Field/`** — 字段类型（Text、Select、Image、File、Editor、Date、HasMany、Embeds、KeyValue 等）
+- **`Grid/Filter/`** — 筛选类型（Like、Equal、Between、Date、Scope、Group 等）
+- **`Grid/Displayers/`** — 列展示渲染器（Badge、Editable、Image、QRCode、Copyable 等）
+- **`Http/Controllers/`** — 控制器（Auth、Dashboard、User、Role、Permission、Menu、Scaffold 等）
+- **`Http/Middleware/`** — 中间件：`admin.auth`、`admin.pjax`、`admin.permission`、`admin.bootstrap`、`admin.session`、`admin.upload`、`admin.app`
+- **`Console/`** — Artisan 命令，模板文件在 `Console/stubs/`
 - **`Scaffold/`** — 代码生成器（Controller、Form、Grid、Model、Show、Migration、Repository 创建器），模板文件在 `Scaffold/stubs/`
 - **`Models/`** — Eloquent 模型：Administrator、Role、Permission、Menu、Setting、Extension
 - **`Extend/`** — 插件/扩展系统（Manager、ServiceProvider、Setting、Version 管理）
 - **`Repositories/`** — 仓库模式（EloquentRepository、QueryBuilderRepository）
-- **`Widgets/`** — 25+ 个可复用组件（Form、Table、Tree、Box、Card、Modal、DialogForm、ApexCharts、Metrics 等）
-- **`Traits/`** — 15 个共享 Trait（HasAssets、HasPermissions、HasHtml、InteractsWithRenderApi 等）
+- **`Widgets/`** — 可复用组件（Form、Table、Tree、Box、Card、Modal、DialogForm、ApexCharts、Metrics 等）
+- **`Traits/`** — 共享 Trait（HasAssets、HasPermissions、HasHtml、InteractsWithRenderApi 等）
 - **`Support/`** — 工具类：Helper、Setting、WebUploader、Translator、Context、Composer
 - **`Layout/`** — 布局系统：Asset、Content、Column、Row、Menu、Navbar、SectionManager
 - **`Octane/`** — Laravel Octane 兼容（FlushAdminState 监听器）
@@ -90,6 +92,10 @@ php artisan admin:menu-cache
 ### 前端
 
 前端资源通过 Laravel Mix（`webpack.mix.js`）编译。源文件在 `resources/assets/`，编译产物在 `resources/dist/`。前端技术栈为 AdminLTE 3、Bootstrap 4、jQuery 3，内置多个插件（editor-md、webuploader、datetimepicker、fontawesome-iconpicker 等）。
+
+主题（`layout.color`，含 `indigo`/`navy`/`emerald`/`amber`/`midnight` 等 9 套）与侧边栏样式（`layout.sidebar_style`，含 5 种实色侧边栏）的机制、色值表和新增主题的步骤见 [`docs/主题与侧边栏样式.md`](docs/主题与侧边栏样式.md)。重新编译全部主题：`php artisan admin:minify all`，随后 `php artisan admin:publish --assets` 发布。
+
+> ⚠️ **发布资源要加 `--force`**：`php artisan admin:publish --assets` 默认**跳过已存在的文件**，改了 CSS/JS 后不加 `--force`（或先删掉 `public/vendor/dcat-admin/` 下对应的旧文件）不会覆盖，页面上会一直是旧资源。
 
 ### 国际化
 

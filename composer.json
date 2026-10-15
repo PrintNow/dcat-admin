@@ -1,5 +1,5 @@
 {
-    "name": "printnow/laravel-admin",
+    "name": "zgy-dcat/laravel-admin",
     "description": "Dcat admin 永久分叉版 / 支持 Laravel 10-13, PHP 版本限制 >= 8.1（支持 PHP 8.5）",
     "type": "library",
     "keywords": [
@@ -11,16 +11,12 @@
         "laravel admin",
         "dcat admin"
     ],
-    "homepage": "https://github.com/PrintNow/dcat-admin",
+    "homepage": "https://github.com/gy23rm/dcat-admin",
     "license": "MIT",
     "authors": [
         {
-            "name": "Shine",
-            "email": "i@nowtime.cc"
-        },
-        {
-            "name": "jqh",
-            "email": "841324345@qq.com"
+            "name": "zgy",
+            "email": "gy23rm@163.com"
         }
     ],
     "require": {

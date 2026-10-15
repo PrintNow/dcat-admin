@@ -344,7 +344,15 @@ class Builder implements FieldsCollection
         }
 
         if ($this->isMode(static::MODE_EDIT)) {
-            return $this->form->resource().'/'.$this->id;
+            $id = $this->id;
+
+            if ($id === null || $id === '') {
+                $id = (string) $id;
+            } elseif (config('admin.route.encrypt', false)) {
+                $id = admin_cipher_encrypt($id, 'fo');
+            }
+
+            return $this->form->resource().'/'.$id;
         }
 
         if ($this->isMode(static::MODE_CREATE)) {

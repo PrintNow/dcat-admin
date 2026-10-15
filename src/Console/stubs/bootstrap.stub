@@ -8,7 +8,7 @@ use Dcat\Admin\Show;
 
 /**
  * Dcat-admin - admin builder based on Laravel.
- * @author jqh <https://github.com/jqhph>
+ * @author zgy <https://github.com/gy23rm>
  *
  * Bootstraper for Admin.
  *

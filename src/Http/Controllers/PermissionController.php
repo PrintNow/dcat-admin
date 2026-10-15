@@ -82,13 +82,18 @@ class PermissionController extends AdminController
 
     public function form()
     {
+        // 捕获控制器引用：表单事件（saved/saving 等）闭包会被 bind 到模型，
+        // 直接写 $this 会变成 Permission::xxx() 导致 undefined method；
+        // 通过 use 捕获的 $controller 始终指向控制器实例。
+        $controller = $this;
+
         $with = [];
 
         if ($bindMenu = config('admin.menu.permission_bind_menu', true)) {
             $with[] = 'menus';
         }
 
-        return Form::make(Permission::with($with), function (Form $form) use ($bindMenu) {
+        return Form::make(Permission::with($with), function (Form $form) use ($bindMenu, $controller) {
             $permissionTable = config('admin.database.permissions_table');
             $connection = config('admin.database.connection');
             $permissionModel = config('admin.database.permissions_model');
@@ -125,8 +130,8 @@ class PermissionController extends AdminController
 
             $form->disableViewButton();
             $form->disableViewCheck();
-        })->saved(function () {
-            $this->flushMenuCache();
+        })->saved(function () use ($controller) {
+            $controller->flushMenuCache();
         });
     }
 

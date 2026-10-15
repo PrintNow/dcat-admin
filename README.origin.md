@@ -1,4 +1,8 @@
 
+> ⚠️ 本文件是**上游 [PrintNow/dcat-admin](https://github.com/PrintNow/dcat-admin) 原始 README 的存档**（保留原貌）：
+> 里面的包名 `printnow/laravel-admin`、packagist 徽章和各类链接都是**上游**的，不是本项目
+> （本项目包名是 `zgy-dcat/laravel-admin`，最新说明见 [README.md](README.md)）。
+
 <div align="center">
     <img src="resources/dist/images/logo-rectangle.png" height="80"> 
 </div>

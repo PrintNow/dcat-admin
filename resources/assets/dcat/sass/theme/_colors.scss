@@ -122,3 +122,6 @@ $divider-color: #f4f4f4;
 $table-border-color: #f0f0f0;
 $table-border-color-darker: #e4e4e4;
 $table-td-height: 60px;
+
+// 主题方案变量（页面底/文字色/深色侧边栏底色/辅助色/浅中底），必须放在本文件末尾覆盖同名变量
+@import "./scheme";

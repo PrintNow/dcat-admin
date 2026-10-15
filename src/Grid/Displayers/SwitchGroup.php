@@ -24,9 +24,17 @@ class SwitchGroup extends SwitchDisplay
 
         $color = $this->color ?: Admin::color()->primary();
 
+        $key = $this->getKey();
+
+        if ($key === null || $key === '') {
+            $key = (string) $key;
+        } elseif (config('admin.route.encrypt', false)) {
+            $key = admin_cipher_encrypt($key, 'gi');
+        }
+
         return Admin::view('admin::grid.displayer.switchgroup', [
             'row'      => $this->row->toArray(),
-            'key'      => $this->getKey(),
+            'key'      => $key,
             'columns'  => $columns,
             'resource' => $this->resource(),
             'color'    => $color,

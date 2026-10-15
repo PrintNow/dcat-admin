@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
 /**
  * Class IdeHelperCommand.
  *
- * @authr jqh <841324345@qq.com>
+ * @authr zgy <gy23rm@163.com>
  */
 class IdeHelperCommand extends Command
 {

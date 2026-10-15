@@ -564,7 +564,44 @@ class Grid
      */
     public function getEditUrl($key)
     {
-        return $this->urlWithConstraints("{$this->resource()}/{$key}/edit");
+        return $this->urlWithConstraints($this->makeActionUrl("{$this->resource()}/{key}/edit", $key));
+    }
+
+    /**
+     * 生成带路径参数加密的 action URL.
+     *
+     * @param  string  $urlTemplate  含 {key} 占位符的 URL 模板
+     * @param  string|int  $key
+     * @return string
+     */
+    protected function makeActionUrl(string $urlTemplate, string|int $key)
+    {
+        $key = $this->cipherKey($key);
+
+        return str_replace('{key}', (string) $key, $urlTemplate);
+    }
+
+    /**
+     * 开启路由加密时，对路径参数 key 加密.
+     *
+     * @param  string|int  $key
+     * @return string|int
+     */
+    protected function cipherKey(string|int $key)
+    {
+        if (! $this->cipherEnabled()) {
+            return $key;
+        }
+
+        return admin_cipher_encrypt($key, 'gi');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function cipherEnabled()
+    {
+        return (bool) config('admin.route.encrypt', false);
     }
 
     /**

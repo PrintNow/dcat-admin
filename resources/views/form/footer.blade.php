@@ -6,7 +6,7 @@
 
         @if(! empty($buttons['submit']))
             <div class="btn-group pull-right">
-                <button class="btn btn-primary submit"><i class="feather icon-save"></i> {{ trans('admin.submit') }}</button>
+                <button class="btn btn-primary submit"><i class="feather icon-save"></i> {{ $submitButtonText ?? trans('admin.submit') }}</button>
             </div>
 
             @if($checkboxes)

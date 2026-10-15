@@ -8,6 +8,7 @@ use Dcat\Admin\Contracts\Repository;
 use Dcat\Admin\Exception\InvalidArgumentException;
 use Dcat\Admin\Http\Controllers\AuthController;
 use Dcat\Admin\Http\JsonResponse;
+use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Menu;
 use Dcat\Admin\Layout\Navbar;
 use Dcat\Admin\Layout\SectionManager;
@@ -31,7 +32,10 @@ class Admin
     use HasAssets;
     use HasHtml;
 
-    const VERSION = '2.4.2';
+    // 本项目（zgy-dcat/laravel-admin）的版本号：用于静态资源版本查询串
+    // （Layout\Asset::withVersionQuery）与后台版本显示，发版时同步更新；
+    // 应用侧也可以用 config('admin.assets_version') 覆盖。
+    const VERSION = '2.5.0';
 
     const SECTION = [
         // 往 <head> 标签内输入内容
@@ -40,6 +44,10 @@ class Admin
         // 往body标签内部输入内容
         'BODY_INNER_BEFORE' => 'ADMIN_BODY_INNER_BEFORE',
         'BODY_INNER_AFTER' => 'ADMIN_BODY_INNER_AFTER',
+
+        // 页脚文案（版权/备案等），默认内容见 layouts/container.blade.php；
+        // 应用可用 admin_inject_section(Admin::SECTION['FOOTER'], …) 换成本项目自己的
+        'FOOTER' => 'ADMIN_FOOTER',
 
         // 往#app内部输入内容
         'APP_INNER_BEFORE' => 'ADMIN_APP_INNER_BEFORE',
@@ -537,6 +545,7 @@ class Admin
         }
 
         $sidebarStyle = config('admin.layout.sidebar_style') ?: 'light';
+        $sidebarClass = Content::sidebarStyleClass($sidebarStyle);
 
         $pjaxId = static::getPjaxContainerId();
 
@@ -546,7 +555,8 @@ class Admin
         $jsVariables['colors'] = static::color()->all();
         $jsVariables['dark_mode'] = static::isDarkMode();
         $jsVariables['sidebar_dark'] = config('admin.layout.sidebar_dark') || ($sidebarStyle === 'dark');
-        $jsVariables['sidebar_light_style'] = in_array($sidebarStyle, ['dark', 'light'], true) ? 'sidebar-light-primary' : 'sidebar-primary';
+        // 暗黑模式切回浅色时要恢复的类，必须与实际渲染出来的类一致，否则会残留类名
+        $jsVariables['sidebar_light_style'] = $sidebarClass === 'sidebar-dark-white' ? 'sidebar-light-primary' : $sidebarClass;
 
         return admin_javascript_json($jsVariables);
     }

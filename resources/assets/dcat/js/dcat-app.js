@@ -4,8 +4,8 @@
   Description: Dcat Admin JS脚本.
   ----------------------------------------------------------------------------------------
   Item Name: Dcat Admin
-  Author: Jqh
-  Author URL: https://github.com/jqhph
+  Author: zgy
+  Author URL: https://github.com/gy23rm
 ==========================================================================================*/
 
 import Dcat from './Dcat'

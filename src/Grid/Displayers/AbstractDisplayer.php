@@ -117,6 +117,36 @@ abstract class AbstractDisplayer
     }
 
     /**
+     * 获取当前行主键（若开启路由加密则返回密文）.
+     *
+     * @return string
+     */
+    public function cipherKey()
+    {
+        $key = $this->getKey();
+
+        if ($key === null || $key === '') {
+            return (string) $key;
+        }
+
+        if (config('admin.route.encrypt', false)) {
+            return admin_cipher_encrypt($key, 'gi');
+        }
+
+        return (string) $key;
+    }
+
+    /**
+     * 生成当前行的资源 URL（路径参数主键自动加密）.
+     *
+     * @return string
+     */
+    public function cipherUrl()
+    {
+        return $this->resource().'/'.$this->cipherKey();
+    }
+
+    /**
      * Get translation.
      *
      * @param  string  $text

@@ -101,6 +101,43 @@ class Color
                 'link'           => '#458769',
             ],
         ],
+        // 以下 5 套为主题方案（见 resources/assets/dcat/sass/theme/_scheme.scss）
+        // primary-darker 取值 = scss 里 darken($primary, 5%) 的编译结果，与样式保持一致
+        'indigo' => [
+            'colors' => [
+                'primary'        => '#4f5fba',
+                'primary-darker' => '#4353ac',
+                'link'           => '#4353ac',
+            ],
+        ],
+        'navy' => [
+            'colors' => [
+                'primary'        => '#2e68ff',
+                'primary-darker' => '#1556ff',
+                'link'           => '#1556ff',
+            ],
+        ],
+        'emerald' => [
+            'colors' => [
+                'primary'        => '#0fa868',
+                'primary-darker' => '#0d915a',
+                'link'           => '#0d915a',
+            ],
+        ],
+        'amber' => [
+            'colors' => [
+                'primary'        => '#f26b1d',
+                'primary-darker' => '#e85d0d',
+                'link'           => '#e85d0d',
+            ],
+        ],
+        'midnight' => [
+            'colors' => [
+                'primary'        => '#4cc9f0',
+                'primary-darker' => '#34c2ee',
+                'link'           => '#34c2ee',
+            ],
+        ],
     ];
 
     /**

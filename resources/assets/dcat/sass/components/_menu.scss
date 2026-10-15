@@ -115,6 +115,20 @@ body.sidebar-collapse {
   box-shadow: 0 0;
 }
 
+// 主题方案的「浅中底」：菜单选中项底色（仅当主题设置了该色时生效）
+@if $scheme-tint {
+  .sidebar-light-primary .nav-item > .nav-link.active {
+    background-color: $scheme-tint;
+    border-radius: .25rem;
+  }
+
+  [class*='sidebar-light-'] .nav-treeview > .nav-item > .nav-link.active,
+  [class*='sidebar-light-'] .nav-treeview > .nav-item > .nav-link.active:hover {
+    background-color: $scheme-tint;
+    border-radius: .25rem;
+  }
+}
+
 .nav-sidebar>.nav-item>.nav-treeview  .nav-link p {
   font-size: 14px;
 }

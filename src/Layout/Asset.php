@@ -236,6 +236,8 @@ class Asset
         'toastr'      => '@toastr',
         'datatables'  => '@datatables',
         'dcat'        => '@dcat',
+        // 实色侧边栏样式（与主题无关，见 resources/assets/dcat/extra/sidebar-solid.scss）
+        'sidebar'     => '@admin/dcat/extra/sidebar-solid.css',
     ];
 
     /**

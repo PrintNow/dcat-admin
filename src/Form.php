@@ -937,6 +937,8 @@ class Form implements Renderable
                 return false;
             }
 
+            $key = $this->cipherKey($key);
+
             return rtrim($resourcesPath, '/')."/{$key}/edit";
         }
 
@@ -947,10 +949,27 @@ class Form implements Renderable
 
         if ($this->request->get('after-save') == 3) {
             // view resource
+            $key = $this->cipherKey($key);
+
             return rtrim($resourcesPath, '/')."/{$key}";
         }
 
         return $this->request->get(Builder::PREVIOUS_URL_KEY) ?: $this->getCurrentUrl($resourcesPath);
+    }
+
+    /**
+     * 开启路由加密时，对路径参数 key 加密.
+     *
+     * @param  string|int  $key
+     * @return string
+     */
+    protected function cipherKey(string|int $key)
+    {
+        if (! config('admin.route.encrypt', false)) {
+            return (string) $key;
+        }
+
+        return (string) admin_cipher_encrypt($key, 'fo');
     }
 
     /**
@@ -1552,6 +1571,19 @@ class Form implements Renderable
     public function disableDeleteButton(bool $disable = true)
     {
         $this->builder->tools()->disableDelete($disable);
+
+        return $this;
+    }
+
+    /**
+     * 设置提交按钮文字
+     *
+     * @param  string  $text
+     * @return $this
+     */
+    public function submitButtonText(string $text)
+    {
+        $this->builder->footer()->submitButtonText($text);
 
         return $this;
     }
