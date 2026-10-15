@@ -1,4 +1,8 @@
 
+> ⚠️ 本文件是**上游原始 README 的存档**（保留原貌）：里面的包名 `printnow/laravel-admin`、
+> packagist 徽章和各类链接**均已过期**。当前包名是 `zgy-dcat/laravel-admin`，
+> 最新说明请看 [README.md](README.md)。
+
 <div align="center">
     <img src="resources/dist/images/logo-rectangle.png" height="80"> 
 </div>
