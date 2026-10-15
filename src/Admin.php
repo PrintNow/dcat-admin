@@ -42,6 +42,10 @@ class Admin
         'BODY_INNER_BEFORE' => 'ADMIN_BODY_INNER_BEFORE',
         'BODY_INNER_AFTER' => 'ADMIN_BODY_INNER_AFTER',
 
+        // 页脚文案（版权/备案等），默认内容见 layouts/container.blade.php；
+        // 应用可用 admin_inject_section(Admin::SECTION['FOOTER'], …) 换成本项目自己的
+        'FOOTER' => 'ADMIN_FOOTER',
+
         // 往#app内部输入内容
         'APP_INNER_BEFORE' => 'ADMIN_APP_INNER_BEFORE',
         'APP_INNER_AFTER' => 'ADMIN_APP_INNER_AFTER',
