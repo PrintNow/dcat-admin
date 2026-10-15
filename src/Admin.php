@@ -32,7 +32,10 @@ class Admin
     use HasAssets;
     use HasHtml;
 
-    const VERSION = 'dev-master';
+    // 本项目（zgy-dcat/laravel-admin）的版本号：用于静态资源版本查询串
+    // （Layout\Asset::withVersionQuery）与后台版本显示，发版时同步更新；
+    // 应用侧也可以用 config('admin.assets_version') 覆盖。
+    const VERSION = '2.5.0';
 
     const SECTION = [
         // 往 <head> 标签内输入内容

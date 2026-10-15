@@ -52,24 +52,26 @@ php artisan admin:menu-cache
 |---|---|
 | `Admin.php` | 主门面/服务单例 — 认证、菜单、导航栏、版本号、页面区域 |
 | `Grid.php` | 数据表格构建器，支持列定义、筛选器、导出、批量操作 |
-| `Form.php` | 表单构建器，67 种字段类型，支持嵌套表单、标签页、分步表单 |
+| `Form.php` | 表单构建器，各类字段类型（见 `Form/Field/`），支持嵌套表单、标签页、分步表单 |
 | `Show.php` | 详情/只读页面构建器 |
 | `Tree.php` | 树形结构展示构建器 |
 
 ### 关键子目录
 
-- **`Form/Field/`** — 67 种字段类型（Text、Select、Image、File、Editor、Date、HasMany、Embeds、KeyValue 等）
-- **`Grid/Filter/`** — 27 种筛选类型（Like、Equal、Between、Date、Scope、Group 等）
-- **`Grid/Displayers/`** — 30 种列展示渲染器（Badge、Editable、Image、QRCode、Copyable 等）
-- **`Http/Controllers/`** — 18 个控制器（Auth、Dashboard、User、Role、Permission、Menu、Scaffold 等）
-- **`Http/Middleware/`** — 7 个中间件：`admin.auth`、`admin.pjax`、`admin.permission`、`admin.bootstrap`、`admin.session`、`admin.upload`、`admin.app`
-- **`Console/`** — 22+ 个 Artisan 命令，模板文件在 `Console/stubs/`
+> 下面只列职责与代表类；各类的数量会随版本变化，需要准确数字直接看对应目录。
+
+- **`Form/Field/`** — 字段类型（Text、Select、Image、File、Editor、Date、HasMany、Embeds、KeyValue 等）
+- **`Grid/Filter/`** — 筛选类型（Like、Equal、Between、Date、Scope、Group 等）
+- **`Grid/Displayers/`** — 列展示渲染器（Badge、Editable、Image、QRCode、Copyable 等）
+- **`Http/Controllers/`** — 控制器（Auth、Dashboard、User、Role、Permission、Menu、Scaffold 等）
+- **`Http/Middleware/`** — 中间件：`admin.auth`、`admin.pjax`、`admin.permission`、`admin.bootstrap`、`admin.session`、`admin.upload`、`admin.app`
+- **`Console/`** — Artisan 命令，模板文件在 `Console/stubs/`
 - **`Scaffold/`** — 代码生成器（Controller、Form、Grid、Model、Show、Migration、Repository 创建器），模板文件在 `Scaffold/stubs/`
 - **`Models/`** — Eloquent 模型：Administrator、Role、Permission、Menu、Setting、Extension
 - **`Extend/`** — 插件/扩展系统（Manager、ServiceProvider、Setting、Version 管理）
 - **`Repositories/`** — 仓库模式（EloquentRepository、QueryBuilderRepository）
-- **`Widgets/`** — 25+ 个可复用组件（Form、Table、Tree、Box、Card、Modal、DialogForm、ApexCharts、Metrics 等）
-- **`Traits/`** — 15 个共享 Trait（HasAssets、HasPermissions、HasHtml、InteractsWithRenderApi 等）
+- **`Widgets/`** — 可复用组件（Form、Table、Tree、Box、Card、Modal、DialogForm、ApexCharts、Metrics 等）
+- **`Traits/`** — 共享 Trait（HasAssets、HasPermissions、HasHtml、InteractsWithRenderApi 等）
 - **`Support/`** — 工具类：Helper、Setting、WebUploader、Translator、Context、Composer
 - **`Layout/`** — 布局系统：Asset、Content、Column、Row、Menu、Navbar、SectionManager
 - **`Octane/`** — Laravel Octane 兼容（FlushAdminState 监听器）
