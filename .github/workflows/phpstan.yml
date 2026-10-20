@@ -33,6 +33,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
+      # Laravel 10/11 已停止安全维护，Composer >= 2.10 默认拒绝加载带安全公告的版本，
+      # 会导致 PHP 8.1 无可安装版本；仅在 CI 中关闭该阻断以保留低版本矩阵。
+      - run: composer config policy.advisories.block false
+
       - run: composer install --no-interaction --prefer-dist
 
       - run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M --error-format=github
