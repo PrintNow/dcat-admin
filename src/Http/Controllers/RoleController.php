@@ -83,7 +83,7 @@ class RoleController extends AdminController
             $with[] = 'menus';
         }
 
-        return Form::make(Role::with($with), function (Form $form) use ($bindMenu) {
+        $form = Form::make(Role::with($with), function (Form $form) use ($bindMenu) {
             $roleTable = config('admin.database.roles_table');
             $connection = config('admin.database.connection');
 
@@ -125,9 +125,11 @@ class RoleController extends AdminController
             if ($id == $roleModel::ADMINISTRATOR_ID) {
                 $form->disableDeleteButton();
             }
-        })->saved(function () {
-            $this->flushMenuCache();
         });
+
+        $this->flushMenuCacheOnSaved($form);
+
+        return $form;
     }
 
     public function destroy($id)
