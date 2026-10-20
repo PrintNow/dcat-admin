@@ -148,6 +148,8 @@ class Zip extends ZipArchive
         $basedir = $options['basedir'];
         $baseglob = $options['baseglob'];
 
+        $folders = [];
+
         if (is_file($source)) {
             $files = [$source];
             $recursive = false;
