@@ -30,10 +30,16 @@ trait HasMenuTreeField
 
     /**
      * Flush menu cache after form saved.
+     *
+     * 注意：Form 的事件回调会被重新绑定到模型实例（见 HasEvents::makeListener），
+     * 回调内的 $this 不再是控制器，因此这里不能依赖 $this，统一通过本方法注册。
      */
-    protected function flushMenuCache()
+    protected function flushMenuCacheOnSaved(Form $form)
     {
-        $model = config('admin.database.menu_model');
-        (new $model())->flushCache();
+        $form->saved(function () {
+            $model = config('admin.database.menu_model');
+
+            (new $model())->flushCache();
+        });
     }
 }

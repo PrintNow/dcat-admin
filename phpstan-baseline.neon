@@ -559,12 +559,6 @@ parameters:
 			path: src/Support/Setting.php
 
 		-
-			message: '#^Variable \$folders might not be defined\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: src/Support/Zip.php
-
-		-
 			message: '#^Result of method Dcat\\Admin\\Tree\:\:disableCreateButton\(\) \(void\) is used\.$#'
 			identifier: method.void
 			count: 1

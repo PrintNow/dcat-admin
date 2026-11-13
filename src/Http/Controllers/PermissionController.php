@@ -88,7 +88,7 @@ class PermissionController extends AdminController
             $with[] = 'menus';
         }
 
-        return Form::make(Permission::with($with), function (Form $form) use ($bindMenu) {
+        $form = Form::make(Permission::with($with), function (Form $form) use ($bindMenu) {
             $permissionTable = config('admin.database.permissions_table');
             $connection = config('admin.database.connection');
             $permissionModel = config('admin.database.permissions_model');
@@ -125,9 +125,11 @@ class PermissionController extends AdminController
 
             $form->disableViewButton();
             $form->disableViewCheck();
-        })->saved(function () {
-            $this->flushMenuCache();
         });
+
+        $this->flushMenuCacheOnSaved($form);
+
+        return $form;
     }
 
     public function getRoutes()
