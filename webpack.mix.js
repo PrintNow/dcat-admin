@@ -24,6 +24,19 @@ function mixAssetsDir(query, cb) {
   });
 }
 
+// 内置主题色，需与 src/Console/MinifyCommand.php 中的 $colors 保持一致
+const themeColors = {
+  'blue': '#6d8be6',
+  'blue-light': '#62a8ea',
+  'green': '#4e9876',
+};
+
+// 编译内置主题时把主题色注入 sass（_primary.scss 中的 $primary 为 !default），
+// 避免只改了 theme、忘记改 _primary.scss 时编译出默认主题色
+function themeSassOptions() {
+  return theme && themeColors[theme] ? {data: `$primary: ${themeColors[theme]};`} : {};
+}
+
 function themeCss(path) {
   let sf = theme ? '-'+theme : '';
 
@@ -49,7 +62,7 @@ mix.copyDirectory('resources/assets/images', distPath + '/images');
 mix.copyDirectory('resources/assets/fonts', distPath + '/fonts');
 
 // AdminLTE3.0
-mix.sass('resources/assets/adminlte/scss/AdminLTE.scss', themeCss('adminlte/adminlte')).sourceMaps();
+mix.sass('resources/assets/adminlte/scss/AdminLTE.scss', themeCss('adminlte/adminlte'), themeSassOptions()).sourceMaps();
 mix.js('resources/assets/adminlte/js/AdminLTE.js', distPath + '/adminlte/adminlte.js').sourceMaps();
 
 // 复制第三方插件文件夹
@@ -57,7 +70,7 @@ mix.copyDirectory(dcatPath('plugins'), dcatDistPath('plugins'));
 // 打包app.js
 mix.js(dcatPath('js/dcat-app.js'), dcatDistPath('js/dcat-app.js')).sourceMaps();
 // 打包app.scss
-mix.sass(dcatPath('sass/dcat-app.scss'), themeCss('dcat/css/dcat-app')).sourceMaps();
+mix.sass(dcatPath('sass/dcat-app.scss'), themeCss('dcat/css/dcat-app'), themeSassOptions()).sourceMaps();
 mix.copy(dcatPath('sass/nunito.css'), `${distPath}/dcat/css/nunito.css`);
 
 // 打包所有 extra 里面的所有js和css
