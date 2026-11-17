@@ -5,6 +5,7 @@ namespace Dcat\Admin\Grid\Column\Filter;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\Column\Filter;
 use Dcat\Admin\Grid\Model;
+use Dcat\Admin\Support\Helper;
 
 class Between extends Filter
 {
@@ -18,8 +19,8 @@ class Between extends Filter
     public function __construct()
     {
         $this->class = [
-            'start' => uniqid('column-filter-start-', true),
-            'end'   => uniqid('column-filter-end-', true),
+            'start' => Helper::uniqueSelector('column-filter-start-'),
+            'end'   => Helper::uniqueSelector('column-filter-end-'),
         ];
     }
 

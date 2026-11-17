@@ -377,6 +377,20 @@ class Helper
     }
 
     /**
+     * 生成可直接用作 HTML id / class 及 CSS 选择器的唯一标识.
+     *
+     * uniqid($prefix, true) 的结果形如 "prefix-6afc085d421c55.27333490"，其中的 "." 会让
+     * `$('.prefix-...')`、`#prefix-...` 这类选择器匹配不到元素，这里去掉 "." 并保留额外熵。
+     *
+     * @param  string  $prefix
+     * @return string
+     */
+    public static function uniqueSelector(string $prefix = ''): string
+    {
+        return str_replace('.', '', uniqid($prefix, true));
+    }
+
+    /**
      * @param  array  $array
      * @param  int  $level
      * @return string
