@@ -6,6 +6,7 @@ use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class Role extends Model
 {
@@ -79,12 +80,28 @@ class Role extends Model
     /**
      * Check user has permission.
      *
-     * @param $permission
+     * @param  string|null  $permission
      * @return bool
      */
     public function can(?string $permission): bool
     {
-        return $this->permissions()->where('slug', $permission)->exists();
+        if (! $permission) {
+            return false;
+        }
+
+        return $this->getCachedPermissionsSlugs()->has($permission);
+    }
+
+    /**
+     * Get cached permissions slugs collection.
+     *
+     * @return Collection
+     */
+    protected function getCachedPermissionsSlugs(): Collection
+    {
+        return once(function () {
+            return $this->permissions()->pluck('slug')->flip();
+        });
     }
 
     /**
@@ -106,24 +123,43 @@ class Role extends Model
      */
     public static function getPermissionId(array $roleIds)
     {
-        if (! $roleIds) {
+        if (empty($roleIds)) {
             return collect();
         }
-        $related = config('admin.database.role_permissions_table');
 
-        $model = new static();
-        $keyName = $model->getKeyName();
+        sort($roleIds);
+        $cacheKey = 'admin.role_permissions.'.md5(implode(',', $roleIds));
 
-        return $model->newQuery()
-            ->leftJoin($related, $keyName, '=', 'role_id')
-            ->whereIn($keyName, $roleIds)
-            ->get(['permission_id', 'role_id'])
-            ->groupBy('role_id')
-            ->map(function ($v) {
-                $v = $v instanceof Arrayable ? $v->toArray() : $v;
+        return cache()->remember($cacheKey, 3600, function () use ($roleIds) {
+            $related = config('admin.database.role_permissions_table');
+            $model = new static();
+            $keyName = $model->getKeyName();
 
-                return array_column($v, 'permission_id');
-            });
+            return $model->newQuery()
+                ->leftJoin($related, $keyName, '=', 'role_id')
+                ->whereIn($keyName, $roleIds)
+                ->get(['permission_id', 'role_id'])
+                ->groupBy('role_id')
+                ->map(function ($v) {
+                    $v = $v instanceof Arrayable ? $v->toArray() : $v;
+
+                    return array_column($v, 'permission_id');
+                });
+        });
+    }
+
+    /**
+     * Clear role permissions cache.
+     *
+     * @return void
+     */
+    public static function clearPermissionCache()
+    {
+        $store = cache()->getStore();
+
+        if (method_exists($store, 'forgetByPrefix')) {
+            $store->forgetByPrefix('admin.role_permissions.');
+        }
     }
 
     /**
@@ -148,6 +184,14 @@ class Role extends Model
             $model->administrators()->detach();
 
             $model->permissions()->detach();
+        });
+
+        static::saved(function () {
+            static::clearPermissionCache();
+        });
+
+        static::deleted(function () {
+            static::clearPermissionCache();
         });
     }
 }
