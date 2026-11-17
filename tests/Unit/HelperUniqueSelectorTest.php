@@ -16,6 +16,16 @@ class HelperUniqueSelectorTest extends TestCase
         $this->assertMatchesRegularExpression('/^[A-Za-z][A-Za-z0-9_-]*$/', $id);
     }
 
+    public function test_prefix_is_added_when_missing_or_not_starting_with_letter(): void
+    {
+        foreach (['', '1-', '-x'] as $prefix) {
+            $id = Helper::uniqueSelector($prefix);
+
+            $this->assertStringStartsWith('dcat-'.$prefix, $id);
+            $this->assertMatchesRegularExpression('/^[A-Za-z][A-Za-z0-9_-]*$/', $id);
+        }
+    }
+
     public function test_results_are_unique(): void
     {
         $ids = [];

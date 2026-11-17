@@ -382,11 +382,17 @@ class Helper
      * uniqid($prefix, true) 的结果形如 "prefix-6afc085d421c55.27333490"，其中的 "." 会让
      * `$('.prefix-...')`、`#prefix-...` 这类选择器匹配不到元素，这里去掉 "." 并保留额外熵。
      *
+     * 前缀为空或不以字母、下划线开头时会自动补上 "dcat-"，保证结果是合法的 CSS 标识符。
+     *
      * @param  string  $prefix
      * @return string
      */
     public static function uniqueSelector(string $prefix = ''): string
     {
+        if (! preg_match('/^[A-Za-z_]/', $prefix)) {
+            $prefix = 'dcat-'.$prefix;
+        }
+
         return str_replace('.', '', uniqid($prefix, true));
     }
 

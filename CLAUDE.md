@@ -105,11 +105,11 @@ php artisan admin:menu-cache
 
 ### PHP 8.0/8.1 现代化（已全面采用）
 
-- **字符串判断**：使用 `str_starts_with()`、`str_contains()`、`str_ends_with()`，不要用 `strpos`/`mb_strpos`/`substr` 做前缀/包含/后缀判断
+- **字符串判断**：使用 `str_starts_with()`、`str_contains()`、`str_ends_with()`，不要用 `strpos`/`mb_strpos`/`substr` 做前缀/包含/后缀判断。**改造旧代码时先确认原语义**：只有 `strpos(...) === 0` 才等价于 `str_starts_with()`；`!== false`、`! strpos(...)` 等写法通常对应 `str_contains()`，不能机械替换（Dropdown、Asset 的回归都源于此）
 - **match 表达式**：简单的 `switch`（每个 case 直接 return/赋值）应使用 `match` 替代；复杂 fall-through 逻辑保留 `switch`
 - **call_user_func**：使用 PHP 8.0+ 直接调用语法 `$fn($args)`、`$obj->method(...$args)`；属性闭包需加括号 `($this->builder)(...)` 避免歧义
 - **数组判断**：使用 `array_is_list()` 替代手动 `array_keys() === range()` 判断
-- **uniqid**：始终传入第二个参数 `true` 以获得更高唯一性，如 `uniqid('prefix-', true)`
+- **uniqid**：始终传入第二个参数 `true` 以获得更高唯一性，如 `uniqid('prefix-', true)`。**但用作 DOM id/class 或 CSS/jQuery 选择器的值必须用 `Helper::uniqueSelector('prefix-')`**——`uniqid(..., true)` 的结果含 `.`，会让选择器匹配不到元素
 
 ### 安全实践
 
