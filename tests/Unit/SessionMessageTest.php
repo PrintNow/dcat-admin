@@ -239,4 +239,50 @@ class SessionMessageTest extends TestCase
             'message' => ['hi'],
         ]));
     }
+
+    public function test_try_from_accepts_legacy_toastr_message_bag_with_type_and_options(): void
+    {
+        // 2.2.x admin_toastr(): new MessageBag(['message' => ..., 'type' => ..., 'options' => ...])
+        $bag = new \Illuminate\Support\MessageBag([
+            'message' => '旧 toastr',
+            'type'    => 'warning',
+            'options' => ['timeOut' => 1234],
+        ]);
+
+        $restored = SessionMessage::tryFrom($bag);
+
+        $this->assertNotNull($restored);
+        $this->assertSame('warning', $restored->getToastrType());
+        $this->assertSame('旧 toastr', $restored->getMessage());
+        $this->assertSame(['timeOut' => 1234], $restored->getOptions());
+
+        // JSON 序列化会话中的数组形态
+        $restored = SessionMessage::tryFrom(json_decode(json_encode($bag), true));
+
+        $this->assertNotNull($restored);
+        $this->assertSame('warning', $restored->getToastrType());
+        $this->assertSame('旧 toastr', $restored->getMessage());
+        $this->assertSame(['timeOut' => 1234], $restored->getOptions());
+    }
+
+    public function test_try_from_legacy_alert_bag_prefers_title_over_type(): void
+    {
+        // 2.2.x admin_info()/admin_success(): MessageBag(['title' => ..., 'message' => ..., 'type' => ...])
+        $restored = SessionMessage::tryFrom(new \Illuminate\Support\MessageBag([
+            'title'   => '操作成功',
+            'message' => '记录已保存',
+            'type'    => 'success',
+        ]));
+
+        $this->assertNotNull($restored);
+        $this->assertSame('操作成功', $restored->getTitle());
+        $this->assertSame('记录已保存', $restored->getMessage());
+    }
+
+    public function test_try_from_rejects_message_bag_shaped_array_with_invalid_type_or_options(): void
+    {
+        $this->assertNull(SessionMessage::tryFrom(['message' => ['hi'], 'type' => 'warning']));
+        $this->assertNull(SessionMessage::tryFrom(['message' => ['hi'], 'options' => 'x']));
+        $this->assertNull(SessionMessage::tryFrom(['message' => ['hi'], 'type' => [['nested']]]));
+    }
 }

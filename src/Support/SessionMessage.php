@@ -76,7 +76,8 @@ final class SessionMessage implements \JsonSerializable
      * - PHP 序列化（session.serialization = php）：值已经是 SessionMessage 对象
      * - JSON 序列化（session.serialization = json）：值是带类型标识的数组
      * - 旧契约：外部代码直接 flash 的 MessageBag 实例，或其序列化后的数组
-     *   （形如 ['title' => ['x'], 'message' => ['y']]）
+     *   （形如 ['title' => ['x'], 'message' => ['y']]，或旧 admin_toastr() 的
+     *   ['message' => ['x'], 'type' => ['warning'], 'options' => [...]]）
      */
     public static function tryFrom(mixed $value): ?self
     {
@@ -105,6 +106,11 @@ final class SessionMessage implements \JsonSerializable
 
     /**
      * 尝试按 MessageBag 序列化数组的形态构造实例（title/message 值为字符串数组）.
+     *
+     * 旧版 admin_toastr() flash 的 MessageBag 形如
+     * ['message' => ['x'], 'type' => ['warning'], 'options' => [...]]，
+     * 没有 title：此时以 type 作为 title（toastr 类型），并保留 options，
+     * 与 2.2.x 的 toastr 模板行为一致。
      */
     private static function tryFromMessageBagArray(array $value): ?self
     {
@@ -112,17 +118,19 @@ final class SessionMessage implements \JsonSerializable
             (! isset($value['title']) && ! isset($value['message']))
             || ! is_array($value['title'] ?? [])
             || ! is_array($value['message'] ?? [])
+            || ! is_array($value['type'] ?? [])
+            || ! is_array($value['options'] ?? [])
         ) {
             return null;
         }
 
-        $title = $value['title'][0] ?? '';
+        $title = $value['title'][0] ?? $value['type'][0] ?? '';
         $message = $value['message'][0] ?? '';
 
         if (! is_string($title) || ! is_string($message)) {
             return null;
         }
 
-        return new self($title, $message);
+        return new self($title, $message, $value['options'] ?? []);
     }
 }
