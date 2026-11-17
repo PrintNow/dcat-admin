@@ -4,6 +4,7 @@ namespace Dcat\Admin\Grid\Column\Filter;
 
 use Dcat\Admin\Grid\Column\Filter;
 use Dcat\Admin\Grid\Model;
+use Dcat\Admin\Support\Helper;
 
 class In extends Filter
 {
@@ -24,8 +25,8 @@ class In extends Filter
         $this->options = $options;
 
         $this->class = [
-            'all'  => uniqid('column-filter-all-', true),
-            'item' => uniqid('column-filter-item-', true),
+            'all'  => Helper::uniqueSelector('column-filter-all-'),
+            'item' => Helper::uniqueSelector('column-filter-item-'),
         ];
     }
 

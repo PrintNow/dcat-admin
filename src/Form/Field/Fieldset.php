@@ -3,6 +3,7 @@
 namespace Dcat\Admin\Form\Field;
 
 use Dcat\Admin\Admin;
+use Dcat\Admin\Support\Helper;
 
 class Fieldset
 {
@@ -10,7 +11,7 @@ class Fieldset
 
     public function __construct()
     {
-        $this->name = uniqid('fieldset-', true);
+        $this->name = Helper::uniqueSelector('fieldset-');
     }
 
     public function start($title)

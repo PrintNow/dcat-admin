@@ -5,6 +5,7 @@ namespace Dcat\Admin\Grid\Column\Filter;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\Column\Filter;
 use Dcat\Admin\Grid\Model;
+use Dcat\Admin\Support\Helper;
 
 class Equal extends Filter
 {
@@ -24,7 +25,7 @@ class Equal extends Filter
     {
         $this->placeholder($placeholder ?: $this->trans('search'));
 
-        $this->class = uniqid('column-filter-', true);
+        $this->class = Helper::uniqueSelector('column-filter-');
     }
 
     /**
