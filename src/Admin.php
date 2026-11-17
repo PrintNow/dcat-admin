@@ -542,7 +542,9 @@ class Admin
 
         $jsVariables['pjax_container_selector'] = $pjaxId ? ('#'.$pjaxId) : '';
         $jsVariables['token'] = csrf_token();
-        $jsVariables['lang'] = ($lang = __('admin.client')) ? array_merge($lang, $jsVariables['lang'] ?? []) : [];
+        // admin.client 含 401/403/419/500 等数字键，array_merge 会把它们重排成 0..n，
+        // 前端 Dcat.lang['500'] 等就取不到了；array_replace 保留原键名。
+        $jsVariables['lang'] = ($lang = __('admin.client')) ? array_replace($lang, $jsVariables['lang'] ?? []) : [];
         $jsVariables['colors'] = static::color()->all();
         $jsVariables['dark_mode'] = static::isDarkMode();
         $jsVariables['sidebar_dark'] = config('admin.layout.sidebar_dark') || ($sidebarStyle === 'dark');
