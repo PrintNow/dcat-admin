@@ -366,7 +366,8 @@ class Asset
         }
 
         return array_filter($files, function ($file) {
-            return !str_starts_with($file, '{');
+            // 丢弃仍含未替换占位符（如 {lang}）的路径，避免请求不存在的文件
+            return ! str_contains($file, '{');
         });
     }
 
