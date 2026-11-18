@@ -69,7 +69,7 @@
         }else{
             $pane.removeClass('active').find('.{{ Dcat\Admin\Form\NestedForm::REMOVE_FLAG_CLASS }}').val(1);
         }
-        if($navTab.closest('li').hasClass('active')){
+        if($navTab.hasClass('active')){
             $navTab.closest('li').remove();
             $(container+' > .nav > li:nth-child(1) > a').click();
         }else{

@@ -49,8 +49,8 @@
             title: $(_title).html(),
             area: area,
             offset: offset,
-            maxmin: {{ $maxmin }},
-            resize: {{ $resize }},
+            maxmin: {{ $maxmin ? 'true' : 'false' }},
+            resize: {{ $resize ? 'true' : 'false' }},
             content: $(_temp).html(),
             success: function(layero, index) {
                 var $c = getLayer(index).find(_container),

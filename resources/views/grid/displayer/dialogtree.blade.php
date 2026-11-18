@@ -20,20 +20,20 @@
             url = t.data('url'),
             title = t.data('title'),
             ckall = t.data('checked'),
-            idx,
-            loading;
+            idx;
 
         val = val ? String(val).split(',') : [];
 
         if (url) {
-            if (loading) return;
-            loading = 1;
+            // 加载状态需保存在元素上，局部变量每次点击都会重新声明，无法防止重复点击
+            if (t.data('loading')) return;
+            t.data('loading', 1);
 
             t.buttonLoading();
-            $.ajax(url, {data: {value: val}}).then(function (resp) {
-                loading = 0;
+            $.ajax(url, {data: {value: val}}).always(function () {
+                t.data('loading', 0);
                 t.buttonLoading(false);
-
+            }).then(function (resp) {
                 if (!resp.status) {
                     return Dcat.error(resp.message || '系统繁忙，请稍后再试');
                 }
