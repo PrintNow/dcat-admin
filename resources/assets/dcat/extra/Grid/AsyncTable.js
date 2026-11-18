@@ -60,7 +60,7 @@ export default class AsyncTable {
         Dcat.ready(function () {
             setTimeout(function () {
                 box.find('.grid-refresh').off('click').on('click', function () {
-                    _this.load(box.data('current'), box);
+                    _this.load(box.attr('data-current'), box);
 
                     return false;
                 })

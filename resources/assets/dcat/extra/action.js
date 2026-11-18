@@ -76,7 +76,7 @@
             return function (result) {
                 var request = result[0], target = result[1];
 
-                if (options.success(target, request) === false) {
+                if (options.error(target, request) === false) {
                     return;
                 }
 

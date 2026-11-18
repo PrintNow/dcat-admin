@@ -60,7 +60,7 @@ export default class Helpers {
      * @returns {null|*}
      */
     get(arr, key, def) {
-        def = null;
+        def = def === undefined ? null : def;
 
         if (this.len(arr) < 1) {
             return def;
@@ -84,10 +84,10 @@ export default class Helpers {
      *
      * @param arr
      * @param key
-     * @returns {def|boolean}
+     * @returns {boolean}
      */
     has(arr, key) {
-        if (this.len(arr) < 1) return def;
+        if (this.len(arr) < 1) return false;
         key = String(key).split('.');
 
         for (var i = 0; i < key.length; i++) {

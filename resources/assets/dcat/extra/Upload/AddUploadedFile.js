@@ -151,7 +151,7 @@ export default class AddUploadedFile {
 
         let _this = this,
             parent = _this.uploader,
-            uploader = _this.uploader,
+            uploader = parent.uploader,
             file = parent.formFiles[fileId];
 
         parent.input.delete(fileId);
