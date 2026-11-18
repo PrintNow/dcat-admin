@@ -52,7 +52,7 @@ export default class Request {
             uploader = parent.uploader,
             options = parent.options,
             updateColumn = parent.getColumn(),
-            relation = _this.relation,
+            relation = parent.relation,
             values = parent.input.get(), // 获取表单值
             num = uploader.getStats().successNum,
             form = $.extend({}, options.formData);

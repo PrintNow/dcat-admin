@@ -152,7 +152,7 @@ export default class Ajax {
                 // 处理api返回的HTML代码
                 options.html(options.target, response.html, response);
             } else {
-                $(target).html(response.html);
+                $(options.target).html(response.html);
             }
         }
 

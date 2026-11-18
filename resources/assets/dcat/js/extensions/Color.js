@@ -2,7 +2,7 @@
 export default class Color {
     constructor(Dcat) {
         let colors = Dcat.config.colors || {},
-            newInstance = $.extend(colors),
+            newInstance = $.extend({}, colors),
             _this = this;
 
         // 获取颜色

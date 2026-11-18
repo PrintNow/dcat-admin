@@ -185,17 +185,17 @@ class Form {
                 }
             };
 
-        queryTabTitleError(_this, $field).removeClass('d-none');
-
-        // 保存字段原始数据
-        _this.originalValues[column] = _this.getFieldValue($field);
-
-        if (! $field) {
+        if (! $field.length) {
             if (Dcat.helpers.len(errors) && errors.length) {
                 Dcat.error(errors.join("  \n  "));
             }
             return;
         }
+
+        queryTabTitleError(_this, $field).removeClass('d-none');
+
+        // 保存字段原始数据
+        _this.originalValues[column] = _this.getFieldValue($field);
 
         render(errors);
 
@@ -270,7 +270,7 @@ class Form {
     removeError($field, column) {
         let options = this.options,
             parent = $field.parents(options.groupSelector),
-            errorClass = this.errorClass;
+            errorClass = options.errorClass;
 
         parent.removeClass(errorClass);
         parent.find(options.errorContainerSelector).html('');
@@ -302,7 +302,11 @@ class Form {
 
         // 移除tab表单tab标题错误信息
         for (column in _this._errColumns) {
-            tab = queryTabTitleError(_this._errColumns[column]);
+            if (! _this._errColumns[column]) {
+                continue;
+            }
+
+            tab = queryTabTitleError(_this, _this._errColumns[column]);
             if (! tab.hasClass('d-none')) {
                 tab.addClass('d-none');
             }
