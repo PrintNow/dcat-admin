@@ -159,11 +159,13 @@ export default class AddUploadedFile {
         delete parent.formFiles[fileId];
 
         if (uploader && !file.fake) {
+            // 本次新上传的文件：与常规删除流程一致，只需从上传队列中移除
             uploader.removeFile(file);
+        } else {
+            // 原有文件：恢复原有文件计数与可上传数量
+            parent.status.switch('decrOriginalFileNum');
+            parent.status.switch('incrFileNumLimit');
         }
-
-        parent.status.switch('decrOriginalFileNum');
-        parent.status.switch('incrFileNumLimit');
 
         if (! Dcat.helpers.len(parent.formFiles) && ! Dcat.helpers.len(parent.percentages)) {
             parent.status.switch('pending');

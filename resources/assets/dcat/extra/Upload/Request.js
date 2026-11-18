@@ -62,18 +62,12 @@ export default class Request {
         }
 
         if (relation) {
-            if (!relation[1]) {
-                // 新增子表记录，则不调用update接口
-                return;
-            }
-
-            form[relation[0]] = {};
-
-            form[relation[0]][relation[1]] = {};
-            form[relation[0]][relation[1]][updateColumn] = values.join(',');
-        } else {
-            form[updateColumn] = values.join(',');
+            // 关联表单（如 hasMany）中的文件不单独自动保存，随整个表单提交时一并保存：
+            // 后端的嵌套表单更新需要完整的子表记录数据，只提交单个字段会被当作新记录处理
+            return;
         }
+
+        form[updateColumn] = values.join(',');
 
         delete form['_relation'];
         delete form['upload_column'];

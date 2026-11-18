@@ -5,7 +5,6 @@
             <option value="{{$select}}" {{ in_array((string) $select, $selectedValues, true) ?'selected':'' }}>{{$option}}</option>
         @endforeach
     </select>
-    <input type="hidden" name="{{$name}}[]" {!! $selectedValues ? 'disabled' : '' !!}/>
 </div>
 
 @include('admin::form.select-script', ['multiple' => true])
