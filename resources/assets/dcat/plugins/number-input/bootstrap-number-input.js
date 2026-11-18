@@ -36,9 +36,18 @@
             var min = toNumber(self.attr('min'));
             var max = toNumber(self.attr('max'));
 
-            // 解析输入内容，去掉空白与千分位分隔符，无法解析时返回 null
+            // 规范化输入：全角数字/符号转半角，去掉空白与千分位分隔符
+            function clean(val) {
+                return String(val === undefined || val === null ? '' : val)
+                    .replace(/[\uff10-\uff19\uff0b\uff0d\uff0e]/g, function (c) {
+                        return String.fromCharCode(c.charCodeAt(0) - 0xfee0);
+                    })
+                    .replace(/[\s,\uff0c]/g, '');
+            }
+
+            // 解析数值，无法解析时返回 null
             function toNumber(val) {
-                val = String(val === undefined || val === null ? '' : val).replace(/[\s,]/g, '');
+                val = clean(val);
 
                 if (val === '' || ! /^[-+]?(\d+\.?\d*|\.\d+)$/.test(val)) {
                     return null;
@@ -59,12 +68,16 @@
             }
 
             // 最近一次合法值，输入非法时回退到该值
-            var lastValid = toNumber(clone.val());
+            var lastValid = toNumber(clone.val()) === null ? null : clean(clone.val());
 
             function getVal() {
                 var n = toNumber(clone.val());
 
-                return n === null ? (lastValid === null ? 0 : lastValid) : n;
+                if (n === null) {
+                    n = toNumber(lastValid);
+                }
+
+                return n === null ? 0 : n;
             }
 
             function setText(n) {
@@ -79,26 +92,17 @@
                 setText(clamp(parseInt(getVal()) + delta));
             }
 
-            var group = $("<div class='input-group'></div>");
-            var down = $("<button type='button'>-</button>").attr({'class': 'btn btn-' +settings.downClass, 'disabled': options.disabled}).click(function () {
-                step(-1);
-            });
-            var up = $("<button type='button'>+</button>").attr({'class': 'btn btn-' +settings.upClass, 'disabled': options.disabled}).click(function () {
-                step(1);
-            });
-            $("<span class='input-group-btn'></span>").append(down).appendTo(group);
-            clone.appendTo(group);
-            if (clone) {
-                clone.css('text-align', 'center');
-            }
-            $("<span class='input-group-btn'></span>").append(up).appendTo(group);
-
-            // 输入过程中不拦截按键（允许粘贴、快捷键、输入法等），失焦时再统一校验
-            clone.prop('type', 'text').blur(function () {
+            // 失焦或回车时校验输入值
+            function normalize() {
                 var raw = $.trim(clone.val());
 
                 if (raw === '') {
-                    lastValid = null;
+                    // 与原逻辑保持一致：空值按 0 处理，0 超出 min/max 时取边界值，否则保持为空
+                    if (clamp(0) !== 0) {
+                        setText(clamp(0));
+                    } else {
+                        lastValid = null;
+                    }
 
                     return;
                 }
@@ -116,18 +120,41 @@
                     return;
                 }
 
-                var cleaned = raw.replace(/[\s,]/g, '');
+                var cleaned = clean(raw),
+                    // 与原逻辑保持一致：按整数部分判断是否超出 min/max
+                    limited = clamp(parseInt(n));
 
-                if (clamp(n) !== n) {
-                    setText(clamp(n));
-                } else if (cleaned !== raw) {
-                    // 仅去掉空白与千分位分隔符，其余保持用户输入原样
+                if (limited !== parseInt(n)) {
+                    setText(limited);
+                } else if (cleaned !== clone.val()) {
+                    // 仅做半角转换并去掉空白与千分位分隔符，其余保持用户输入原样
                     setText(cleaned);
                 } else {
-                    lastValid = n;
+                    lastValid = cleaned;
+                }
+            }
+
+            var group = $("<div class='input-group'></div>");
+            var down = $("<button type='button'>-</button>").attr({'class': 'btn btn-' +settings.downClass, 'disabled': options.disabled}).click(function () {
+                step(-1);
+            });
+            var up = $("<button type='button'>+</button>").attr({'class': 'btn btn-' +settings.upClass, 'disabled': options.disabled}).click(function () {
+                step(1);
+            });
+            $("<span class='input-group-btn'></span>").append(down).appendTo(group);
+            clone.appendTo(group);
+            if (clone) {
+                clone.css('text-align', 'center');
+            }
+            $("<span class='input-group-btn'></span>").append(up).appendTo(group);
+
+            // 输入过程中不拦截按键（允许粘贴、快捷键、输入法等），失焦时再统一校验；
+            // 回车会直接提交表单而不触发失焦，所以回车时也先校验一次
+            clone.prop('type', 'text').blur(normalize).keydown(function (e) {
+                if (e.keyCode === 13) {
+                    normalize();
                 }
             });
-
 
             self.replaceWith(group);
         });
