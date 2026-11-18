@@ -186,6 +186,10 @@ class Form {
             };
 
         if (! $field.length) {
+            // 找不到对应字段时，直接弹出错误信息
+            if (typeof errors === 'string') {
+                errors = [errors];
+            }
             if (Dcat.helpers.len(errors) && errors.length) {
                 Dcat.error(errors.join("  \n  "));
             }
