@@ -33,35 +33,61 @@
             var self = $(this);
             var clone = self.clone();
 
-            var min = self.attr('min');
-            var max = self.attr('max');
+            var min = toNumber(self.attr('min'));
+            var max = toNumber(self.attr('max'));
 
-            function getVal() {
-                var val = clone.val();
+            // 解析输入内容，去掉空白与千分位分隔符，无法解析时返回 null
+            function toNumber(val) {
+                val = String(val === undefined || val === null ? '' : val).replace(/[\s,]/g, '');
 
-                if (! val || val === "NaN") {
-                    return 0;
+                if (val === '' || ! /^[-+]?(\d+\.?\d*|\.\d+)$/.test(val)) {
+                    return null;
                 }
 
-                return parseInt(val);
+                return parseFloat(val);
+            }
+
+            function clamp(n) {
+                if (min !== null && n < min) {
+                    return min;
+                }
+                if (max !== null && n > max) {
+                    return max;
+                }
+
+                return n;
+            }
+
+            // 最近一次合法值，输入非法时回退到该值
+            var lastValid = toNumber(clone.val());
+
+            function getVal() {
+                var n = toNumber(clone.val());
+
+                return n === null ? (lastValid === null ? 0 : lastValid) : n;
             }
 
             function setText(n) {
-                if ((min && n < min) || (max && n > max)) {
-                    return false;
-                }
-
-                clone.focus().val(n);
+                clone.val(n);
+                lastValid = n;
                 clone.trigger('change');
-                return true;
+            }
+
+            // 按钮加减时保留原值的小数位，避免浮点误差
+            function step(delta) {
+                var val = getVal(),
+                    decimals = (String(val).split('.')[1] || '').length;
+
+                clone.focus();
+                setText(clamp(parseFloat((val + delta).toFixed(decimals))));
             }
 
             var group = $("<div class='input-group'></div>");
             var down = $("<button type='button'>-</button>").attr({'class': 'btn btn-' +settings.downClass, 'disabled': options.disabled}).click(function () {
-                setText(getVal() - 1);
+                step(-1);
             });
             var up = $("<button type='button'>+</button>").attr({'class': 'btn btn-' +settings.upClass, 'disabled': options.disabled}).click(function () {
-                setText(getVal() + 1);
+                step(1);
             });
             $("<span class='input-group-btn'></span>").append(down).appendTo(group);
             clone.appendTo(group);
@@ -70,38 +96,26 @@
             }
             $("<span class='input-group-btn'></span>").append(up).appendTo(group);
 
-            // remove spins from original
-            clone.prop('type', 'text').keydown(function (e) {
-                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                    (e.keyCode == 65 && e.ctrlKey === true) ||
-                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // 输入过程中不拦截按键（允许粘贴、快捷键、输入法等），失焦时再统一校验
+            clone.prop('type', 'text').attr('inputmode', 'decimal').blur(function () {
+                var raw = $.trim(clone.val());
+
+                if (raw === '') {
+                    lastValid = null;
+
                     return;
                 }
-                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                    e.preventDefault();
-                }
 
-                var c = String.fromCharCode(e.which);
-                var n = (getVal() + c);
+                var n = toNumber(raw);
 
-                //if ((min && n < min) || (max && n > max)) {
-                //    e.preventDefault();
-                //}
-            });
+                n = n === null ? lastValid : clamp(n);
 
-            clone.prop('type', 'text').blur(function (e) {
-                var c = parseInt(String.fromCharCode(e.which));
-                if (isNaN(c)) {
-                    c = 0;
-                }
-
-                var n = getVal() + c;
-
-                if ((min && n < min)) {
-                    setText(min);
-                }
-                else if (max && n > max) {
-                    setText(max);
+                if (n === null) {
+                    clone.val('');
+                } else if (String(n) !== raw) {
+                    setText(n);
+                } else {
+                    lastValid = n;
                 }
             });
 
