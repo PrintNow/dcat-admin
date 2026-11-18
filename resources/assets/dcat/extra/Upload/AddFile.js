@@ -33,7 +33,7 @@ export default class AddFile {
                     </div>`).appendTo($li);
         } else {
             $li = $(`
-                    <li id="${parent.getFileViewSelector(file.id)}" title="${file.nam}">
+                    <li id="${parent.getFileViewSelector(file.id)}" title="${file.name}">
                     <p class="title" style="display:block">
                         <i class="feather icon-check green _success icon-success"></i>
                         ${file.name} (${size})
