@@ -327,12 +327,7 @@
         var sortable = Sortable.create(document.getElementById("table-fields-sortable"),{
             handle:'.table-field-sort-handle',
             onEnd: function () {
-                getTR().each(function(index){
-                    $(this).find("[name^='fields']").each(function(){
-                        var newName = $(this).attr('name').replace(/fields\[(\d)\]/, `fields[${index}]`);
-                        $(this).attr('name', newName);
-                    })
-                });
+                reindexFields();
             }
         });
 
@@ -344,8 +339,8 @@
             var element = $('#table-fields-sortable tr');
             if (element.length > 0) {
                 element.each(function (i, v) {
-                    var translation = $(v).find('input[name="fields[' + i + '][translation]"]');
-                    var comment = $(v).find('input[name="fields[' + i + '][comment]"]');
+                    var translation = $(v).find('input[name$="[translation]"]');
+                    var comment = $(v).find('input[name$="[comment]"]');
                     if (translation.val() !== "" && comment.val() === "") {
                         comment.val(translation.val());
                     }
@@ -358,6 +353,9 @@
 
         $('#table-fields').on('click', '.table-field-remove', function(event) {
             $(event.target).closest('tr').remove();
+
+            // 删除中间行后重新编号，避免新增行的下标与已有行冲突
+            reindexFields();
         });
 
         $('#scaffold').on('submit', function (event) {
@@ -515,6 +513,16 @@
         }
         function witeRepository(val) {
             $repository.val(repositoryNamespace + ucfirst(ucfirst(toHump(toLine(val)))))
+        }
+
+        // 按当前行顺序重新编号字段下标
+        function reindexFields() {
+            getTR().each(function(index){
+                $(this).find("[name^='fields']").each(function(){
+                    var newName = $(this).attr('name').replace(/fields\[(\d+)\]/, `fields[${index}]`);
+                    $(this).attr('name', newName);
+                })
+            });
         }
 
         function getTR() {
