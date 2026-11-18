@@ -73,13 +73,10 @@
                 clone.trigger('change');
             }
 
-            // 按钮加减时保留原值的小数位，避免浮点误差
+            // 与原逻辑保持一致：按钮按整数加减
             function step(delta) {
-                var val = getVal(),
-                    decimals = (String(val).split('.')[1] || '').length;
-
                 clone.focus();
-                setText(clamp(parseFloat((val + delta).toFixed(decimals))));
+                setText(clamp(parseInt(getVal()) + delta));
             }
 
             var group = $("<div class='input-group'></div>");
@@ -97,7 +94,7 @@
             $("<span class='input-group-btn'></span>").append(up).appendTo(group);
 
             // 输入过程中不拦截按键（允许粘贴、快捷键、输入法等），失焦时再统一校验
-            clone.prop('type', 'text').attr('inputmode', 'decimal').blur(function () {
+            clone.prop('type', 'text').blur(function () {
                 var raw = $.trim(clone.val());
 
                 if (raw === '') {
@@ -108,12 +105,24 @@
 
                 var n = toNumber(raw);
 
-                n = n === null ? lastValid : clamp(n);
-
                 if (n === null) {
-                    clone.val('');
-                } else if (String(n) !== raw) {
-                    setText(n);
+                    // 无法解析时回退到上一次的合法值
+                    if (lastValid === null) {
+                        clone.val('');
+                    } else {
+                        setText(lastValid);
+                    }
+
+                    return;
+                }
+
+                var cleaned = raw.replace(/[\s,]/g, '');
+
+                if (clamp(n) !== n) {
+                    setText(clamp(n));
+                } else if (cleaned !== raw) {
+                    // 仅去掉空白与千分位分隔符，其余保持用户输入原样
+                    setText(cleaned);
                 } else {
                     lastValid = n;
                 }
