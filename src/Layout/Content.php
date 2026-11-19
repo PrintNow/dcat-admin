@@ -10,6 +10,9 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\ViewErrorBag;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class Content implements Renderable
 {
     use HasBuilderEvents, Macroable;

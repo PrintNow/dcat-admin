@@ -214,7 +214,9 @@ class DialogForm
     }
 
     /**
-     * @return string
+     * 仅注册脚本，不返回内容（__destruct 中 Helper::render(null) 得到空字符串）.
+     *
+     * @return null
      */
     protected function render()
     {

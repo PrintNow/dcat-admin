@@ -625,7 +625,7 @@ class EloquentRepository extends Repository implements TreeRepository
     /**
      * 获取父级ID字段名称.
      *
-     * @return string
+     * @return string|void
      */
     public function getParentColumn()
     {
@@ -639,7 +639,7 @@ class EloquentRepository extends Repository implements TreeRepository
     /**
      * 获取标题字段名称.
      *
-     * @return string
+     * @return string|void
      */
     public function getTitleColumn()
     {
@@ -653,7 +653,7 @@ class EloquentRepository extends Repository implements TreeRepository
     /**
      * 获取排序字段名称.
      *
-     * @return string
+     * @return string|void
      */
     public function getOrderColumn()
     {

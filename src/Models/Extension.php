@@ -4,6 +4,17 @@ namespace Dcat\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Extension.
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $version
+ * @property int $is_enabled
+ * @property array|null $options
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Extension extends Model
 {
     protected $fillable = ['name', 'is_enabled', 'version', 'options'];

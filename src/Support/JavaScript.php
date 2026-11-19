@@ -5,6 +5,9 @@ namespace Dcat\Admin\Support;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class JavaScript
 {
     protected static $scripts = [];

@@ -79,18 +79,38 @@ class DropdownActions extends Actions
         return view($this->view, $actions);
     }
 
+    /**
+     * 返回 null 时使用 Action 自身的默认标题.
+     *
+     * @return string|void
+     */
     protected function getViewLabel()
     {
     }
 
+    /**
+     * 返回 null 时使用 Action 自身的默认标题.
+     *
+     * @return string|void
+     */
     protected function getEditLabel()
     {
     }
 
+    /**
+     * 返回 null 时使用 Action 自身的默认标题.
+     *
+     * @return string|void
+     */
     protected function getQuickEditLabel()
     {
     }
 
+    /**
+     * 返回 null 时使用 Action 自身的默认标题.
+     *
+     * @return string|void
+     */
     protected function getDeleteLabel()
     {
     }

@@ -124,3 +124,9 @@ php artisan admin:menu-cache
 - **循环内避免 array_merge**：收集到数组后用 `array_merge(...$arrays)` 一次性合并，或用 `array_push($arr, ...$spread)`
 - **展开运算符**：`[...$a, ...$b]` 替代 `array_merge($a, $b)`（适用于关联数组合并）
 - **+= 不替代 array_merge**：`+=` 只添加左侧不存在的键，会静默丢弃同名键，验证属性/消息合并场景必须用 `array_merge`
+
+### 静态分析（PHPStan）
+
+- **禁止 baseline**：不要运行 `phpstan --generate-baseline`，也不要新建 `phpstan-baseline.neon`（CI 会拒绝）。baseline 会把真实 bug 一起冻结，f676ac3c 删除 import 导致的回归就曾被它掩盖。
+- 新报错优先修复；确属误报（可选依赖已有 `class_exists` 保护、`Closure::call` 运行时绑定等）时，在 `phpstan.neon` 的 `ignoreErrors` 中按 `identifier` + `path`（尽量加 `message`）添加，并在上方注释写明理由。
+- Eloquent 魔术方法、动态属性等误报，优先通过 `@mixin`、`@property`、`@method` 等 docblock 消除，不要直接忽略。

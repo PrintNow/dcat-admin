@@ -4,6 +4,14 @@ namespace Dcat\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Setting.
+ *
+ * @property string $slug
+ * @property string $value
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Setting extends Model
 {
     protected $primaryKey = 'slug';

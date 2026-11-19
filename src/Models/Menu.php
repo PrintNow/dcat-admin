@@ -12,8 +12,16 @@ use Spatie\EloquentSortable\Sortable;
  * Class Menu.
  *
  * @property int $id
+ * @property int $parent_id
+ * @property int $order
+ * @property string $title
+ * @property string|null $icon
+ * @property string|null $uri
  *
  * @method where($parent_id, $id)
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @phpstan-consistent-constructor
  */
 class Menu extends Model implements Sortable
 {

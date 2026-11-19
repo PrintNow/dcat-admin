@@ -19,6 +19,8 @@ use Illuminate\Support\Str;
 
 /**
  * @mixin Builder
+ *
+ * @property mixed $model 仅在 reset() 中被动态赋值为 null
  */
 #[\AllowDynamicProperties]
 class Model

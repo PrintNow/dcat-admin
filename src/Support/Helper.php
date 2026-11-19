@@ -268,7 +268,7 @@ class Helper
 
             $methods = array_map('strtoupper', explode(',', $methods));
 
-            if (! empty($methods) && ! in_array($request->method(), $methods)) {
+            if (! in_array($request->method(), $methods)) {
                 return false;
             }
         }
@@ -883,7 +883,7 @@ class Helper
     /**
      * Html转义.
      *
-     * @param  array|string  $item
+     * @param  array|string|null  $item
      * @return mixed
      */
     public static function htmlEntityEncode($item)

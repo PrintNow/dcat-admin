@@ -39,4 +39,12 @@ jobs:
 
       - run: composer install --no-interaction --prefer-dist
 
+      # 禁止使用 baseline 冻结报错：新问题必须修复，或在 phpstan.neon 中按 identifier + path + 理由显式忽略
+      - name: Forbid PHPStan baseline
+        run: |
+          if [ -f phpstan-baseline.neon ] || grep -qE "^\s*-\s*\S*baseline\S*\.neon" phpstan.neon; then
+            echo "::error::不允许使用 phpstan-baseline.neon，请修复问题或在 phpstan.neon 中写明理由后显式忽略"
+            exit 1
+          fi
+
       - run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M --error-format=github

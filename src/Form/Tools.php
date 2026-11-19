@@ -233,11 +233,8 @@ HTML;
             $this->disableDelete();
         }
 
-        if (empty($tools)) {
-            return '';
-        }
-
-        return $tools->map([Helper::class, 'render'])->implode(' ');
+        // 兼容子类传入数组或 null：空值同样返回 ''
+        return collect($tools)->map([Helper::class, 'render'])->implode(' ');
     }
 
     /**

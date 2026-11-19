@@ -8,6 +8,9 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Fluent;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class Setting extends Fluent
 {
     /**

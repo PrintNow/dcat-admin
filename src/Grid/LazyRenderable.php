@@ -6,6 +6,9 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Support\LazyRenderable as Renderable;
 
+/**
+ * @property-read mixed $_simple_ 通过 __get 读取 payload
+ */
 abstract class LazyRenderable extends Renderable
 {
     const SIMPLE_NAME = '_simple_';

@@ -18,7 +18,9 @@ class ExtensionDiableCommand extends Command
         $name = $this->argument('name');
 
         if (! $extensionManager->has($name)) {
-            return $this->error(sprintf('Unable to find a registered extension called "%s"', $name));
+            $this->error(sprintf('Unable to find a registered extension called "%s"', $name));
+
+            return;
         }
 
         $extensionManager->enable($name, false);

@@ -97,10 +97,10 @@ class ExportSeedCommand extends Command
      */
     protected function getTableDataArrayAsString($table, $exceptFields = [])
     {
-        $fields = \DB::getSchemaBuilder()->getColumnListing($table);
+        $fields = \Illuminate\Support\Facades\DB::getSchemaBuilder()->getColumnListing($table);
         $fields = array_diff($fields, $exceptFields);
 
-        $array = \DB::table($table)->get($fields)->map(function ($item) {
+        $array = \Illuminate\Support\Facades\DB::table($table)->get($fields)->map(function ($item) {
             return (array) $item;
         })->all();
 

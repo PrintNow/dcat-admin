@@ -6,6 +6,9 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Contracts\LazyRenderable as Renderable;
 use Dcat\Admin\Traits\LazyWidget;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 abstract class LazyRenderable implements Renderable
 {
     use LazyWidget;

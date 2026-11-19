@@ -21,6 +21,7 @@ use Illuminate\Support\Arr;
  * @property array $scripts
  * @property array $extra
  * @property string $version
+ * @phpstan-consistent-constructor
  */
 class ComposerProperty implements Arrayable
 {

@@ -5,6 +5,13 @@ namespace Dcat\Admin\Http\Controllers;
 use Dcat\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
 
+/**
+ * 子类需实现以下方法.
+ *
+ * @method \Dcat\Admin\Grid grid()
+ * @method \Dcat\Admin\Show detail($id)
+ * @method \Dcat\Admin\Form form()
+ */
 class AdminController extends Controller
 {
     /**

@@ -116,7 +116,7 @@ class FixColumns
     }
 
     /**
-     * @return \Closure
+     * @return void
      */
     public function apply()
     {

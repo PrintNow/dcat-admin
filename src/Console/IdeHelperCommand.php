@@ -343,7 +343,7 @@ class IdeHelperCommand extends Command
      */
     public function getAllControllers()
     {
-        return collect(\Route::getRoutes())->map(function ($route) {
+        return collect(\Illuminate\Support\Facades\Route::getRoutes())->map(function ($route) {
             try {
                 $action = $route->getActionName();
 

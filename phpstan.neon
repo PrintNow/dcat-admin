@@ -1,11 +1,125 @@
-includes:
-    - phpstan-baseline.neon
+# 不使用 baseline：每条忽略都必须写明 identifier、path 与理由。
+# 不要运行 --generate-baseline，baseline 会把真实 bug 一并冻结（参见 #46 修复的 f676ac3c 回归）。
+# reportUnmatchedIgnoredErrors 开启后，问题修复后对应的忽略条目必须同步删除，否则 CI 失败。
 
 parameters:
     level: 1
     phpVersion: 80100
     paths:
         - src
+    reportUnmatchedIgnoredErrors: true
     ignoreErrors:
-        # class_alias 中使用的 Facade 类名
-        - '#Class Admin not found#'
+        # ---------------------------------------------------------------
+        # 框架设计：允许子类自定义构造函数，make(...$params) 原样透传参数
+        # ---------------------------------------------------------------
+        -
+            identifier: new.static
+            path: src/Actions/Action.php
+        -
+            identifier: new.static
+            path: src/Grid/Column/Filter.php
+        -
+            identifier: new.static
+            path: src/Widgets/Form.php
+        -
+            identifier: new.static
+            path: src/Widgets/Widget.php
+
+        # ---------------------------------------------------------------
+        # 运行时注册或运行时绑定，静态分析无法推断
+        # ---------------------------------------------------------------
+        # \Admin 是 AdminServiceProvider::aliasAdmin() 在运行时通过 class_alias 注册的别名
+        -
+            identifier: class.notFound
+            path: src/AdminServiceProvider.php
+            message: '#^Class Admin not found\.$#'
+
+        # Facades\Request 的 docblock 未声明 offsetUnset；运行时 __callStatic 转发到实现了 ArrayAccess 的 Illuminate\Http\Request
+        -
+            identifier: staticMethod.notFound
+            path: src/Traits/ModelTree.php
+            message: '#^Call to an undefined static method Illuminate\\Support\\Facades\\Request\:\:offsetUnset\(\)\.$#'
+            count: 2
+
+        # Grid 列 if()/showTreeInDialog() 与 Show as() 的回调通过 Closure::call 绑定到行模型，闭包内 $this 为 Administrator
+        -
+            identifier: property.notFound
+            path: src/Http/Controllers/UserController.php
+            message: '#^Access to an undefined property Dcat\\Admin\\Http\\Controllers\\UserController\:\:\$roles\.$#'
+            count: 3
+
+        # customFormat 闭包通过 Closure::call 绑定到表单数据 Fluent，$this->password 为原密码哈希
+        -
+            identifier: property.notFound
+            path: src/Http/Controllers/AuthController.php
+            message: '#^Access to an undefined property Dcat\\Admin\\Http\\Controllers\\AuthController\:\:\$password\.$#'
+            count: 1
+
+        # setCurrentUrl() 已用 instanceof LazyRenderable 保护；实现该接口的表单按约定 use Traits\LazyWidget 提供 payload()
+        -
+            identifier: method.notFound
+            path: src/Widgets/Form.php
+            message: '#^Call to an undefined method \$this\(Dcat\\Admin\\Widgets\\Form\)&Dcat\\Admin\\Contracts\\LazyRenderable\:\:payload\(\)\.$#'
+
+        # ---------------------------------------------------------------
+        # 可选依赖：调用前均有 class_exists / function_exists 保护
+        # ---------------------------------------------------------------
+        # 兼容 Flysystem v1：先 class_exists(LocalAdapter::class)，不存在时使用 v3 的 LocalFilesystemAdapter
+        -
+            identifier: class.notFound
+            path: src/Console/PublishCommand.php
+            message: '#^Instantiated class League\\Flysystem\\Adapter\\Local not found\.$#'
+            count: 2
+
+        # mews/captcha：Captcha 构造函数已 class_exists 判断，未安装时抛出 AdminException
+        -
+            identifier: function.notFound
+            path: src/Form/Field/Captcha.php
+            message: '#^Function captcha_src not found\.$#'
+
+        # dcat/laravel-softdeletes：仅以 ::class 常量参与 in_array(..., class_uses())，不触发自动加载
+        -
+            identifier: class.notFound
+            path: src/Repositories/EloquentRepository.php
+            message: '#^Class Dcat\\Laravel\\Database\\SoftDeletes not found\.$#'
+
+        # intervention/image v2：__call 已 class_exists 判断；thumbnail() 仅在用户主动调用时执行（v3 兼容问题见 docs/known-issues.md）
+        -
+            identifier: class.notFound
+            path: src/Form/Field/ImageField.php
+            message: '#^(Call to static method make\(\) on an unknown class Intervention\\Image\\(ImageManagerStatic|Facades\\Image)|Parameter \$constraint of anonymous function has invalid type Intervention\\Image\\Constraint)\.$#'
+            count: 3
+
+        # ---------------------------------------------------------------
+        # 已知 bug（见 docs/known-issues.md），修复后必须删除对应条目
+        # ---------------------------------------------------------------
+        # prepend() 中 \StringBackedEnum 不存在，backed enum 取了 name 而非 value
+        -
+            identifier: class.notFound
+            path: src/Grid/Column/HasDisplayers.php
+            message: '#^Class StringBackedEnum not found\.$#'
+
+        # 未启用导出时 handleExportRequest(true) 读取未定义的 $scope
+        -
+            identifier: variable.undefined
+            path: src/Grid/Concerns/HasExporter.php
+            message: '#^Variable \$scope might not be defined\.$#'
+            count: 2
+
+        # 普通 Widget Form 在请求带 _payload_ 时调用不存在的 payload()
+        -
+            identifier: method.notFound
+            path: src/Widgets/Form.php
+            message: '#^Call to an undefined method Dcat\\Admin\\Widgets\\Form\:\:payload\(\)\.$#'
+
+        # File/Image 字段 deleteFileAndResponse() 调用了被 UploadField 覆盖的 deleteFile($paths)
+        -
+            identifier: arguments.count
+            path: src/Traits/HasUploadedFile.php
+            message: '#^Method Dcat\\Admin\\Form\\Field\\File\:\:deleteFile\(\) invoked with 2 parameters, 1 required\.$#'
+
+        # AuthController 未定义 CURRENT_URL_NAME，子类调用 getCurrentUrl() 会报错
+        -
+            identifier: classConstant.notFound
+            path: src/Traits/HasFormResponse.php
+            message: '#^Access to undefined constant static\(Dcat\\Admin\\Http\\Controllers\\AuthController\)\:\:CURRENT_URL_NAME\.$#'
