@@ -247,7 +247,7 @@ class Form implements Renderable
 
     protected function initPayload()
     {
-        if ($payload = \request(static::LAZY_PAYLOAD_NAME)) {
+        if (method_exists($this, 'payload') && $payload = \request(static::LAZY_PAYLOAD_NAME)) {
             $this->payload(json_decode($payload, true) ?? []);
         }
     }

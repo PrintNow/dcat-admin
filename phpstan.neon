@@ -98,28 +98,3 @@ parameters:
             identifier: class.notFound
             path: src/Grid/Column/HasDisplayers.php
             message: '#^Class StringBackedEnum not found\.$#'
-
-        # 未启用导出时 handleExportRequest(true) 读取未定义的 $scope
-        -
-            identifier: variable.undefined
-            path: src/Grid/Concerns/HasExporter.php
-            message: '#^Variable \$scope might not be defined\.$#'
-            count: 2
-
-        # 普通 Widget Form 在请求带 _payload_ 时调用不存在的 payload()
-        -
-            identifier: method.notFound
-            path: src/Widgets/Form.php
-            message: '#^Call to an undefined method Dcat\\Admin\\Widgets\\Form\:\:payload\(\)\.$#'
-
-        # File/Image 字段 deleteFileAndResponse() 调用了被 UploadField 覆盖的 deleteFile($paths)
-        -
-            identifier: arguments.count
-            path: src/Traits/HasUploadedFile.php
-            message: '#^Method Dcat\\Admin\\Form\\Field\\File\:\:deleteFile\(\) invoked with 2 parameters, 1 required\.$#'
-
-        # AuthController 未定义 CURRENT_URL_NAME，子类调用 getCurrentUrl() 会报错
-        -
-            identifier: classConstant.notFound
-            path: src/Traits/HasFormResponse.php
-            message: '#^Access to undefined constant static\(Dcat\\Admin\\Http\\Controllers\\AuthController\)\:\:CURRENT_URL_NAME\.$#'
