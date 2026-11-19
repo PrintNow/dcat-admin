@@ -6,6 +6,10 @@ class Ip extends Text
 {
     protected $rules = ['nullable', 'ip'];
 
+    protected $inputmaskNormalizePaste = true;
+
+    protected $inputmaskKeepUnfitValue = true;
+
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *

@@ -11,6 +11,20 @@ class Text extends Field
     use PlainInput;
     use Sizeable;
 
+    /**
+     * 是否在粘贴时将全角字符转为半角后再交给 inputmask 处理.
+     *
+     * @var bool
+     */
+    protected $inputmaskNormalizePaste = false;
+
+    /**
+     * 已有值不符合掩码时是否保留原值（不挂载掩码）.
+     *
+     * @var bool
+     */
+    protected $inputmaskKeepUnfitValue = false;
+
     public function __construct($column, $arguments = [])
     {
         if (static::class === self::class) {
@@ -145,11 +159,61 @@ JS
 
         $options = admin_javascript_json($options);
 
-        $this->script = "Dcat.init('{$this->getElementClassSelector()}', function (self) {
+        if (! $this->inputmaskNormalizePaste && ! $this->inputmaskKeepUnfitValue) {
+            $this->script = "Dcat.init('{$this->getElementClassSelector()}', function (self) {
             self.inputmask($options);
         });";
 
+            return $this;
+        }
+
+        if ($this->inputmaskNormalizePaste) {
+            $options = '$.extend({onBeforePaste: '.static::inputmaskPasteNormalizer().'}, '.$options.')';
+        }
+
+        $script = "self.inputmask($options);";
+
+        if ($this->inputmaskKeepUnfitValue) {
+            // 已有值（如编辑页中的历史数据）无法被掩码完整表示时（val 与去掉掩码后的值都与原值不一致），
+            // 不挂载掩码并恢复原值，避免显示被截断、保存时被静默覆盖；符合掩码的值行为不变.
+            $script = <<<JS
+var original = self.val(), trimmed = $.trim(original);
+            {$script}
+            if (trimmed !== '' && self.val() !== trimmed && self.inputmask('unmaskedvalue') !== trimmed) {
+                self.inputmask('remove');
+                self.val(original);
+            }
+JS;
+        }
+
+        $this->script = "Dcat.init('{$this->getElementClassSelector()}', function (self) {
+            {$script}
+        });";
+
         return $this;
+    }
+
+    /**
+     * 粘贴时先将全角字符（如全角数字、全角标点、全角空格）转为半角，再交给 Inputmask 默认的粘贴处理逻辑.
+     *
+     * 只转换全角字符，其余输入原样保留；Inputmask 默认的 onBeforePaste 即调用 onBeforeMask，
+     * 这里保持同样的后续处理，因此不含全角字符的粘贴结果与之前完全一致.
+     *
+     * @internal
+     *
+     * @return string
+     */
+    public static function inputmaskPasteNormalizer()
+    {
+        return <<<'JS'
+function (value, opts) {
+    value = String(value).replace(/[\uFF01-\uFF5E]/g, function (c) {
+        return String.fromCharCode(c.charCodeAt(0) - 0xFEE0);
+    }).replace(/\u3000/g, ' ');
+
+    return $.isFunction(opts.onBeforeMask) ? opts.onBeforeMask(value, opts) : value;
+}
+JS;
     }
 
     /**

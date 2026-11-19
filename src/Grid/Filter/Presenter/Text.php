@@ -3,6 +3,7 @@
 namespace Dcat\Admin\Grid\Filter\Presenter;
 
 use Dcat\Admin\Admin;
+use Dcat\Admin\Form\Field\Text as FieldText;
 
 class Text extends Presenter
 {
@@ -20,6 +21,11 @@ class Text extends Presenter
      * @var string
      */
     protected $type = 'text';
+
+    /**
+     * @var bool
+     */
+    protected $normalizeMaskPaste = false;
 
     /**
      * Text constructor.
@@ -80,7 +86,7 @@ class Text extends Presenter
      */
     public function integer()
     {
-        return $this->inputmask(['alias' => 'integer']);
+        return $this->normalizedInputmask(['alias' => 'integer']);
     }
 
     /**
@@ -92,7 +98,7 @@ class Text extends Presenter
      */
     public function decimal($options = [])
     {
-        return $this->inputmask(array_merge($options, ['alias' => 'decimal']));
+        return $this->normalizedInputmask(array_merge($options, ['alias' => 'decimal']));
     }
 
     /**
@@ -104,7 +110,7 @@ class Text extends Presenter
      */
     public function currency($options = [])
     {
-        return $this->inputmask(array_merge($options, [
+        return $this->normalizedInputmask(array_merge($options, [
             'alias'              => 'currency',
             'prefix'             => '',
             'removeMaskOnSubmit' => true,
@@ -122,7 +128,7 @@ class Text extends Presenter
     {
         $options = array_merge(['alias' => 'percentage'], $options);
 
-        return $this->inputmask($options);
+        return $this->normalizedInputmask($options);
     }
 
     /**
@@ -147,7 +153,7 @@ class Text extends Presenter
      */
     public function mobile($mask = '19999999999')
     {
-        return $this->inputmask(compact('mask'), 'phone');
+        return $this->normalizedInputmask(compact('mask'), 'phone');
     }
 
     /**
@@ -163,10 +169,32 @@ class Text extends Presenter
 
         $options = json_encode($options);
 
+        if ($this->normalizeMaskPaste) {
+            $options = '$.extend({onBeforePaste: '.FieldText::inputmaskPasteNormalizer().'}, '.$options.')';
+        }
+
         Admin::script("$('#{$this->filter->parent()->filterID()} input.{$this->filter->getId()}').inputmask($options);");
 
         $this->icon = $icon;
 
         return $this;
+    }
+
+    /**
+     * 调用 inputmask，并在粘贴时先将全角字符转为半角.
+     *
+     * @param  array  $options
+     * @param  string  $icon
+     * @return $this
+     */
+    protected function normalizedInputmask($options = [], $icon = 'pencil')
+    {
+        $this->normalizeMaskPaste = true;
+
+        try {
+            return $this->inputmask($options, $icon);
+        } finally {
+            $this->normalizeMaskPaste = false;
+        }
     }
 }
