@@ -163,12 +163,6 @@ parameters:
 			path: src/Form/Field/Nullable.php
 
 		-
-			message: '#^Class Dcat\\Admin\\Form\\Field\\Model not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Form/Field/Select.php
-
-		-
 			message: '#^Variable \$tools in empty\(\) always exists and is not falsy\.$#'
 			identifier: empty.variable
 			count: 1
@@ -239,18 +233,6 @@ parameters:
 			identifier: new.static
 			count: 1
 			path: src/Grid/Exporters/AbstractExporter.php
-
-		-
-			message: '#^Call to static method urlWithQuery\(\) on an unknown class Dcat\\Admin\\Grid\\Filter\\Presenter\\Helper\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Grid/Filter/Presenter/Select.php
-
-		-
-			message: '#^Class Dcat\\Admin\\Grid\\Filter\\Presenter\\Arrayable not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Grid/Filter/Presenter/Select.php
 
 		-
 			message: '#^Method Dcat\\Admin\\Grid\\FixColumns\:\:apply\(\) should return Closure but return statement is missing\.$#'
