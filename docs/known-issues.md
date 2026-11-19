@@ -39,7 +39,7 @@
 | 15 | `forgetIgnored()` 按数组下标删除，传字段名无效；`removeIgnoredFields()` 也不能取消忽略，目前无法按字段名取消 ignore | src/Form/Concerns/HandleCascadeFields.php 或 Form.php（ignore 相关） | 待复现 |
 | 16 | `WhereBetween` 继承了 `toTimestamp()`，但 `condition()` 不处理它，调用后无效果 | src/Grid/Filter/WhereBetween.php | 待复现 |
 | 17 | `Layout\Column` 构造时把数组宽度先 `(int)` 强转，`['md' => 6]` 变成 1 | src/Layout/Column.php:30-58 | 待复现 |
-| 18 | `Grid\Column` 的 `prepend()` 中判断 `instanceof \StringBackedEnum`，PHP 没有这个类型，条件永远为 false（应为 `\BackedEnum`） | src/Grid/Column/HasDisplayers.php | 待复现 |
+| 18 | `Grid\Column` 的 `prepend()` 中判断 `instanceof \StringBackedEnum`，PHP 没有这个类型，条件永远为 false（应为 `\BackedEnum`） | src/Grid/Column/HasDisplayers.php | 已核实（PHPStan class.notFound；修复会改变 backed enum 的显示值，待评估） |
 | 19 | `SwitchDisplay::display(string $color = '')` 参数声明为 string，却在内部判断 `instanceof \Closure`，传闭包会 TypeError | src/Grid/Displayers/SwitchDisplay.php | 待复现 |
 | 20 | `Dcat.color.alpha('primary', 0.1)` 传颜色名时返回 `rgba(0,0,0,...)`，只有传 hex 才正确 | resources/assets/dcat/js/extensions/Color.js | 待复现 |
 | 21 | QuickSearch 语法中日期函数的正则未锚定，`title:update,x` 会被识别为 `whereDate` | src/Grid/Concerns/HasQuickSearch.php:160 | 待复现 |
@@ -48,13 +48,11 @@
 | 32 | `EmbeddedForm::prepareValue()` 遇到没有对应子字段的键时 `$field` 为 null，`method_exists(null, 'prepare')` 在 PHP 8 抛 TypeError；embeds 提交值中混入额外键（如 saving 中与原值合并）会导致保存失败 | src/Form/EmbeddedForm.php:186-194 | 已核实 |
 | 33 | `same('password')` 把 `confirmed` 规则追加到对方字段的默认 `rules`，而设置了 `creationRules`/`updateRules` 的字段在对应模式下会整体忽略默认 `rules`，导致一致性校验只剩前端 | src/Form/Field/Text.php:72-73、src/Form/Concerns/HasFieldValidator.php:119-127 | 已核实 |
 | 34 | 重写后的 `$.post(options)` 直接执行 `Object.assign(options.data, {_token})`，未传 `data` 时抛 TypeError，请求不会发出 | resources/assets/dcat/js/extensions/Ajax.js:40-42 | 已核实 |
-
-> 以下 3 条来自 `phpstan-baseline.neon` 中被忽略的告警，需逐条确认是否为真实问题：
-> - `Grid/Exporters/AbstractExporter.php` 访问未定义属性 `$modelQueries`；
-> - `Console/ExtensionInstallCommand.php` 中 `sprintf` 无占位符却传了参数；
-> - `Grid.php` 中 `$scope` 可能未定义。
->
-> 基线中的其他条目主要是 Eloquent 魔术方法、Facade 别名和可选依赖（Intervention Image、captcha 等）的误报。
+| 35 | 未启用导出时 `handleExportRequest(true)` 读取未定义的 `$scope`，返回 500 | src/Grid/Concerns/HasExporter.php:61-76 | 已核实，修复中（#50） |
+| 36 | 普通 Widget Form（未 use `LazyWidget`）在请求带 `_payload_` 参数时调用不存在的 `payload()`，任意用户可通过 URL 参数触发 500 | src/Widgets/Form.php `initPayload()` | 已核实，修复中（#50） |
+| 37 | `File`/`Image` 字段 `deleteFileAndResponse()` 误调被 `UploadField::deleteFile($paths)` 覆盖的方法：未传磁盘时不删除却返回成功，传入磁盘时抛 TypeError | src/Traits/HasUploadedFile.php:76-81、src/Form/Field/UploadField.php | 已核实，修复中（#50） |
+| 38 | `AuthController` 使用 `HasFormResponse` 但未定义 `CURRENT_URL_NAME`，子类调用 `getCurrentUrl()` 报 Undefined constant | src/Http/Controllers/AuthController.php | 已核实，修复中（#50） |
+| 39 | `ImageField` 仅适配 intervention/image v2：装 v3（Laravel 11+ 新项目默认）时 `__call` 误报未安装，`thumbnail()` 直接 Class not found | src/Form/Field/ImageField.php:52、79、173 | 已核实 |
 
 ## 低优先级
 
