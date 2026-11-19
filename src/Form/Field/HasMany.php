@@ -224,6 +224,17 @@ class HasMany extends Field
                 });
             }
         }
+
+        // 与 Currency::sanitizeInput 保持一致：校验前去掉千分位分隔符
+        if ($field instanceof Currency && is_string($field->column()) && is_array(Arr::get($input, $this->column))) {
+            foreach (array_keys(Arr::get($input, $this->column)) as $key) {
+                $value = $input[$this->column][$key][$field->column()] ?? null;
+
+                if (is_string($value)) {
+                    $input[$this->column][$key][$field->column()] = str_replace(',', '', $value);
+                }
+            }
+        }
     }
 
     /**
