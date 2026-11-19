@@ -126,7 +126,9 @@ class Text extends Presenter
      */
     public function percentage($options = [])
     {
-        $options = array_merge(['alias' => 'percentage'], $options);
+        // 筛选表单以原生 submit（pjax）提交，开启 removeMaskOnSubmit 后提交 "50" 而不是 "50 %"；
+        // 如需保持旧行为可传入 ['removeMaskOnSubmit' => false].
+        $options = array_merge(['alias' => 'percentage', 'removeMaskOnSubmit' => true], $options);
 
         return $this->normalizedInputmask($options);
     }
