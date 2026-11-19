@@ -5,6 +5,7 @@ namespace Dcat\Admin\Form\Field;
 use Dcat\Admin\Form\Field;
 use Dcat\Admin\Support\Helper;
 use Dcat\Admin\Traits\HasModelOptions;
+use Illuminate\Database\Eloquent\Model;
 
 class Select extends Field
 {
