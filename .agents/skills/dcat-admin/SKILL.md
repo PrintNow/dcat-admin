@@ -57,7 +57,7 @@ metadata:
 13. `creationRules()` / `updateRules()` 会**替换**对应模式下的 `rules()`，而不是叠加，所以 `same()` 加的 `confirmed` 也会随之失效。unique 规则忽略自身写 `'unique:users,email,{{id}}'`。
 14. 数组值字段（`checkbox`、`multipleSelect`、`tags`、`multipleImage`/`multipleFile`、`embeds`、`table`、`array`、`keyValue`、`list`）不会自动编码。模型 `$casts` 和字段 `->saveAsJson()` 二选一，两者都配会双重编码。
 15. 编辑带关联的表单要预加载：`Form::make(Post::with('tags'), ...)`。多对多还需 `->customFormat(fn ($v) => array_column($v ?: [], 'id'))`。`hasMany` 的子模型需要 `$fillable`。
-16. select 的选项：全量用 `->options(Category::pluck('title', 'id'))`；远程搜索用 `->ajax(url)`，并配合 `->model(Category::class, 'id', 'title')` 回显当前值。⚠️ 2.4.0–2.4.7 中 `options(Model::class, ...)` 传类名不可用（`Select.php` 缺少 `Model` 导入）。
+16. select 的选项：全量用 `->options(Category::pluck('title', 'id'))`；远程搜索用 `->ajax(url)`，并配合 `->model(Category::class, 'id', 'title')` 回显当前值。⚠️ `options(Model::class, ...)` 传类名在 2.4.0–2.4.7 中不可用（缺少 `Model` 导入，2.4.8 已修复）；需兼容这些版本时用上面的写法。
 17. `disable()` 的字段不会被提交，只读展示用 `readOnly()` 或 `display()`。`number()` 回显时会转成 int，小数请用 `decimal()` 或 `currency()`。分步表单已移出核心，需要安装 `dcat-admin/form-step` 扩展。
 
 **Show**

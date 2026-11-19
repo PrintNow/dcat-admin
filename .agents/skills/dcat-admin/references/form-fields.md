@@ -58,7 +58,7 @@
   - `groups([['label' => 'A', 'options' => [...]]])`、`config($key, $val)`、`addDefaultConfig()`、`disableClearButton()`。
   - 父级下拉树：`options(Category::selectOptions())`（模型 `use ModelTree`），见 `tree.md`。
 
-  > ⚠️ `options(User::class, 'id', 'name')` 在 2.4.0–2.4.7 不可用（`Select.php` 缺 `Model` 导入，类名被当作 ajax URL，多传参数抛 TypeError）。统一写 `->model(User::class, 'id', 'name')`。
+  > ⚠️ `options(User::class, 'id', 'name')` 在 2.4.0–2.4.7 不可用（`Select.php` 缺 `Model` 导入，2.4.8 已修复，类名被当作 ajax URL，多传参数抛 TypeError）。统一写 `->model(User::class, 'id', 'name')`。
 - **multipleSelect**：提交数组（过滤空值）；读取接受数组、JSON 或逗号分隔字符串。多对多见 `form-relations.md`。**listbox**：继承 multipleSelect，`settings(array)`。
 - **radio**：`inline()`（默认 true）、`style()`（默认 `primary`）。**checkbox**：继承 multipleSelect，`canCheckAll()`、`inline()`、`style()`。
 - **switch**：**保存为 1/0**；颜色 `primary()/green()/.../color($c)`，`small()`（默认）/`large()`。
