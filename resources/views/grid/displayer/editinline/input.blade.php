@@ -12,6 +12,9 @@
 @section('popover-shown')
     @if(! empty($mask))
     $popover.find('.ie-input').inputmask({!! admin_javascript_json($mask) !!});
+    @if(! empty($unmask))
+    $popover.find('.ie-input').attr('data-unmask', 1);
+    @endif
     @endif
 @endsection
 </script>
