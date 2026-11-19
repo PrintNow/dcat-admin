@@ -6,6 +6,8 @@ class Currency extends Text
 {
     protected $symbol = '$';
 
+    protected $inputmaskNormalizePaste = true;
+
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *

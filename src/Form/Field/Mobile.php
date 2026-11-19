@@ -4,6 +4,10 @@ namespace Dcat\Admin\Form\Field;
 
 class Mobile extends Text
 {
+    protected $inputmaskNormalizePaste = true;
+
+    protected $inputmaskKeepUnfitValue = true;
+
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
