@@ -86,10 +86,27 @@
                 clone.trigger('change');
             }
 
-            // 与原逻辑保持一致：按钮按整数加减
+            // 与原逻辑保持一致：按钮按整数加减，结果超出 min/max 时不做任何变动
             function step(delta) {
+                var n = parseInt(getVal()) + delta;
+
+                if (clamp(n) !== n) {
+                    return;
+                }
+
                 clone.focus();
-                setText(clamp(parseInt(getVal()) + delta));
+                setText(n);
+            }
+
+            // 开始编辑时同步当前值，避免其它脚本通过 val() 修改后仍回退到旧值
+            function syncLastValid() {
+                var val = clone.val();
+
+                if ($.trim(val) === '') {
+                    lastValid = null;
+                } else if (toNumber(val) !== null) {
+                    lastValid = clean(val);
+                }
             }
 
             // 失焦或回车时校验输入值
@@ -150,7 +167,7 @@
 
             // 输入过程中不拦截按键（允许粘贴、快捷键、输入法等），失焦时再统一校验；
             // 回车会直接提交表单而不触发失焦，所以回车时也先校验一次
-            clone.prop('type', 'text').blur(normalize).keydown(function (e) {
+            clone.prop('type', 'text').focus(syncLastValid).blur(normalize).keydown(function (e) {
                 if (e.keyCode === 13) {
                     normalize();
                 }
