@@ -62,7 +62,7 @@ export default class Request {
         }
 
         if (relation) {
-            // 关联表单（如 hasMany）中的文件不单独自动保存，随整个表单提交时一并保存：
+            // 关联表单（hasMany、embeds 等）中的文件不单独自动保存，随整个表单提交时一并保存：
             // 后端的嵌套表单更新需要完整的子表记录数据，只提交单个字段会被当作新记录处理
             return;
         }
