@@ -40,7 +40,7 @@
 ## 文本类
 
 - **text**：`same()` 规则见 `form.md`；`inputmask(array)`、`datalist(array)`。**textarea**：`rows(int = 5)`，数组值以格式化 JSON 显示，无 prepend/append。
-- 默认规则：email `nullable|email`、url `nullable|url`、ip `nullable|ip`；mobile 无默认规则，inputmask 默认 `['mask' => '99999999999']`，改用 `->options(['mask' => ...])`。
+- 默认规则：email `nullable|email`、url `nullable|url`、ip `nullable|ip`；mobile 无默认规则，inputmask 默认 `['mask' => '99999999999']`，改用 `->options(['mask' => ...])`。2.5.0 起 mobile/ip 的已有值不符合掩码（如 `+86 ...`、IPv6）时保留原值、不挂掩码；ip 掩码仍只支持 IPv4，录入 IPv6 用 `text('ip')->rules('ip')`。
 - **password**：不会自动 hash，需在 `saving` 中处理。
 - **color**：`hex()/rgb()/rgba()`。**icon**：fontawesome-iconpicker。**tel**：type=tel。
 - **captcha**：需 `mews/captcha`，否则抛 `AdminException`；列名固定 `__captcha__`，自动 ignore，规则 `required|captcha`。
@@ -58,7 +58,7 @@
   - `groups([['label' => 'A', 'options' => [...]]])`、`config($key, $val)`、`addDefaultConfig()`、`disableClearButton()`。
   - 父级下拉树：`options(Category::selectOptions())`（模型 `use ModelTree`），见 `tree.md`。
 
-  > ⚠️ `options(User::class, 'id', 'name')` 在 2.4.0–2.4.7 不可用（`Select.php` 缺 `Model` 导入，2.4.8 已修复，类名被当作 ajax URL，多传参数抛 TypeError）。统一写 `->model(User::class, 'id', 'name')`。
+  > ⚠️ `options(User::class, 'id', 'name')` 在 2.4.0–2.4.7 不可用（`Select.php` 缺 `Model` 导入，2.5.0 已修复，类名被当作 ajax URL，多传参数抛 TypeError）。统一写 `->model(User::class, 'id', 'name')`。
 - **multipleSelect**：提交数组（过滤空值）；读取接受数组、JSON 或逗号分隔字符串。多对多见 `form-relations.md`。**listbox**：继承 multipleSelect，`settings(array)`。
 - **radio**：`inline()`（默认 true）、`style()`（默认 `primary`）。**checkbox**：继承 multipleSelect，`canCheckAll()`、`inline()`、`style()`。
 - **switch**：**保存为 1/0**；颜色 `primary()/green()/.../color($c)`，`small()`（默认）/`large()`。
@@ -75,8 +75,8 @@ bootstrap-datetimepicker，`format()` 用 **moment 格式**；`options([...])` �
 
 ## 数值类
 
-- **number**：**取值强转 `(int)`、空值存 `0`**，小数用 decimal/currency；`min()/max()` 为 HTML 属性。
-- **decimal**：inputmask decimal。**currency**：`symbol('$')`、`digits(int)`，提交时去千分位逗号。
+- **number**：**取值强转 `(int)`、空值存 `0`**，小数用 decimal/currency；`min()/max()` 为 HTML 属性。2.5.0 起 `integer(bool $value = true)`：前端失焦/回车时向零取整，并自动追加整数校验（源码：src/Form/Field/Number.php）。
+- **decimal**：inputmask decimal。**currency**：`symbol('$')`、`digits(int)`，提交时去千分位逗号；2.5.0 起校验前也会去掉千分位，已有值小数位多于 `digits` 时不再被四舍五入。
 - **rate**：**前缀 `%` 的文本框（费率），不是星级评分**。
 - **slider**：ion.rangeSlider，`options(['min'=>..,'max'=>..,'step'=>..,'postfix'=>..])`。**range**：两个文本框分别存两列。
 
