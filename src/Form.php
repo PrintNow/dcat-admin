@@ -88,6 +88,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\MultipleSelectTable multipleSelectTable($column, $label = '')
  * @method Field\Button button(string $html = null)
  * @method Field\Autocomplete autocomplete($column, $label = '')
+ * @phpstan-consistent-constructor
  */
 class Form implements Renderable
 {
@@ -752,7 +753,7 @@ class Form implements Renderable
      *
      * @param  int  $id
      * @param  array  $input
-     * @return Response
+     * @return Response|void
      */
     protected function handleOrderable(array $input = [])
     {

@@ -24,6 +24,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\Traits\Macroable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class Show implements Renderable
 {
     use HasBuilderEvents;

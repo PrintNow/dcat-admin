@@ -11,6 +11,9 @@ use Illuminate\Support\Str;
  * @method $this disableExportAll(bool $value = true)
  * @method $this disableExportCurrentPage(bool $value = true)
  * @method $this disableExportSelectedRow(bool $value = true)
+ *
+ * @property \Illuminate\Support\Collection|null $modelQueries
+ * @phpstan-consistent-constructor
  */
 #[\AllowDynamicProperties]
 abstract class AbstractExporter implements ExporterInterface

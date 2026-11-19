@@ -75,10 +75,16 @@ class Extension extends Repository
         return [];
     }
 
+    /**
+     * @return void
+     */
     public function delete(Form $form, array $deletingData)
     {
     }
 
+    /**
+     * @return void
+     */
     public function store(Form $form)
     {
     }

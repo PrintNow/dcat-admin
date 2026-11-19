@@ -73,7 +73,7 @@ trait HasFields
      * Push Field.
      *
      * @param  Field  $field
-     * @return Collection
+     * @return void
      */
     public function pushField(Field $field)
     {

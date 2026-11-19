@@ -23,6 +23,7 @@ use Illuminate\Support\Traits\Macroable;
  * Class Tree.
  *
  * @see https://github.com/dbushell/Nestable
+ * @phpstan-consistent-constructor
  */
 class Tree implements Renderable
 {
@@ -284,7 +285,9 @@ class Tree implements Renderable
 
     public function showCreateButton(bool $value = true)
     {
-        return $this->disableCreateButton(! $value);
+        $this->disableCreateButton(! $value);
+
+        return;
     }
 
     public function disableQuickCreateButton(bool $value = true)
@@ -322,7 +325,9 @@ class Tree implements Renderable
 
     public function showSaveButton(bool $value = true)
     {
-        return $this->disableSaveButton(! $value);
+        $this->disableSaveButton(! $value);
+
+        return;
     }
 
     /**
@@ -338,7 +343,9 @@ class Tree implements Renderable
 
     public function showRefreshButton(bool $value = true)
     {
-        return $this->disableRefreshButton(! $value);
+        $this->disableRefreshButton(! $value);
+
+        return;
     }
 
     public function disableQuickEditButton(bool $value = true)

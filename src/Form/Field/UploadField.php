@@ -338,7 +338,7 @@ trait UploadField
 
     /**
      * @param  UploadedFile  $file
-     * @return bool|\Illuminate\Support\MessageBag
+     * @return string|false|void
      */
     protected function getValidationErrors(UploadedFile $file)
     {

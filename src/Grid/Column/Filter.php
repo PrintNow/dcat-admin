@@ -240,6 +240,8 @@ HMLT;
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|void
      */
     public function render()
     {

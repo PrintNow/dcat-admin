@@ -5,6 +5,9 @@ namespace Dcat\Admin\Widgets;
 use Dcat\Admin\Grid\LazyRenderable as LazyGrid;
 use Illuminate\Contracts\Support\Renderable;
 
+/**
+ * @property string|null $class 通过 Widget::__get/__set 读写 htmlAttributes
+ */
 class Box extends Widget
 {
     protected $view = 'admin::widgets.box';

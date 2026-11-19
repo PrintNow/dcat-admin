@@ -46,7 +46,7 @@ class HandleFormController
     /**
      * @param  Request  $request
      * @param $form
-     * @return File
+     * @return File|null|void
      */
     protected function getField(Request $request, $form)
     {

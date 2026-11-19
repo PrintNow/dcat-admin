@@ -66,7 +66,7 @@ abstract class Setting extends Form implements LazyRenderable
     /**
      * 弹窗标题.
      *
-     * @return string
+     * @return string|void
      */
     public function title()
     {

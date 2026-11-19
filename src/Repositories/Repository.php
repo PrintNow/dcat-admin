@@ -11,6 +11,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use RuntimeException;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 abstract class Repository implements RepositoryInterface, TreeRepository
 {
     use Macroable;

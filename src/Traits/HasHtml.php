@@ -149,7 +149,9 @@ trait HasHtml
             }
 
             if ($element->hasAttribute('once') || $element->hasAttribute('first')) {
-                return static::script($script, $element->hasAttribute('first'));
+                static::script($script, $element->hasAttribute('first'));
+
+                return;
             }
 
             return $script;

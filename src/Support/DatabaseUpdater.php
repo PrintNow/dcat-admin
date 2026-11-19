@@ -79,7 +79,7 @@ class DatabaseUpdater
      * Resolve a migration instance from a file.
      *
      * @param  string  $file
-     * @return object
+     * @return object|void
      */
     public function resolve($file)
     {

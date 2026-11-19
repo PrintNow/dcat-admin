@@ -19,7 +19,7 @@ class LangCreator
      *
      * @param  string  $controller
      * @param  string  $title
-     * @return string
+     * @return string|void
      */
     public function create(string $controller, ?string $title)
     {

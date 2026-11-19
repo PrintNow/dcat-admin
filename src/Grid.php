@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 #[\AllowDynamicProperties]
 class Grid
 {

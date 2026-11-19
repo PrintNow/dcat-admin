@@ -11,6 +11,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\EloquentSortable\Sortable;
 
+/**
+ * Class Permission.
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $http_method
+ * @property string|null $http_path
+ * @property int $order
+ * @property int $parent_id
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @phpstan-consistent-constructor
+ */
 class Permission extends Model implements Sortable
 {
     use HasDateTimeFormatter,

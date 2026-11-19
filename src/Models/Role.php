@@ -7,6 +7,16 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Class Role.
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @phpstan-consistent-constructor
+ */
 class Role extends Model
 {
     use HasDateTimeFormatter;

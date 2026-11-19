@@ -30,6 +30,7 @@ use Illuminate\Validation\ValidationException;
  * @method $this optionsIf($condition, array $data)
  * @method $this withValidationIf($condition, $errors)
  * @method $this withExceptionIf($condition, \Throwable $e)
+ * @phpstan-consistent-constructor
  */
 class JsonResponse implements Arrayable
 {

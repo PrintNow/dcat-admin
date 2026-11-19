@@ -85,7 +85,7 @@ trait HasFiles
      * 新增页面删除文件.
      *
      * @param  array  $input
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|void
      */
     protected function deleteFileWhenCreating(array $input)
     {

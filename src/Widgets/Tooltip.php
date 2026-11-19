@@ -139,6 +139,9 @@ JS
         );
     }
 
+    /**
+     * @return void
+     */
     public function render()
     {
         if ($this->built) {

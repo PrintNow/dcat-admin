@@ -254,7 +254,7 @@ abstract class ServiceProvider extends LaravelServiceProvider
     }
 
     /**
-     * @return string
+     * @return string|void
      */
     public function getLogoBase64()
     {

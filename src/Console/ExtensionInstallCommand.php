@@ -39,7 +39,7 @@ class ExtensionInstallCommand extends Command
 
         $manager->extract($path);
 
-        $this->output->writeln(sprintf('<info>Migrating extension...</info>', $name));
+        $this->output->writeln('<info>Migrating extension...</info>');
 
         Admin::extension()->load();
 

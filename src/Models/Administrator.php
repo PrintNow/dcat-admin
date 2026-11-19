@@ -15,7 +15,15 @@ use Illuminate\Support\Facades\URL;
 /**
  * Class Administrator.
  *
+ * @property int $id
+ * @property string $username
+ * @property string $password
+ * @property string $name
+ * @property string|null $avatar
+ * @property string|null $remember_token
  * @property Role[] $roles
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Administrator extends Model implements AuthenticatableContract, Authorizable
 {

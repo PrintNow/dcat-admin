@@ -9,6 +9,12 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * 以下方法来自 \Illuminate\Console\Concerns\CreatesMatchingTest，仅当子类 use 该 trait 时存在（调用处已用 class_uses_recursive 判断）.
+ *
+ * @method void addTestOptions()
+ * @method bool handleTestCreation($path)
+ */
 abstract class GeneratorCommand extends Command
 {
     protected $baseDirectory;
