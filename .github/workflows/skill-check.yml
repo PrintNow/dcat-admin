@@ -1,0 +1,30 @@
+name: Skill Check
+
+on:
+  push:
+    branches: ['2.0']
+  pull_request:
+    branches: ['2.0']
+    paths:
+      - 'src/**'
+      - '.agents/skills/**'
+      - 'tools/skill-check/**'
+      - '.github/workflows/skill-check.yml'
+
+jobs:
+  skill-check:
+    runs-on: ubuntu-latest
+
+    name: Check skill API references
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - run: composer install --no-interaction --prefer-dist
+
+      - run: php tools/skill-check/check.php .agents/skills
