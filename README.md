@@ -19,6 +19,7 @@
 - [从原版 dcat-admin 迁移](#从原版-dcat-admin-迁移)
 - [相较原项目的改动](#相较原项目的改动)
 - [文档](#文档)
+- [AI 编码助手 Skill](#ai-编码助手-skill)
 
 ## 兼容性
 
@@ -118,6 +119,7 @@ php artisan optimize:clear
 - 新增 `admin.assets_version` 配置项（或 `ADMIN_ASSETS_VERSION` 环境变量），可独立控制 JS/CSS 缓存版本号，不再强制跟随框架版本
 - 新增 `Viewable` 列展示类，点击眼睛图标切换显示 / 隐藏值
 - 新增 `HighlightJS` 列展示类，支持代码块语法高亮
+- 内置 AI 编码助手 Skill，`admin:publish` 新增 `--skills`、`--claude` 选项
 - 支持 `BackedEnum` 枚举：表格列取值、数据仓库字段渲染、`Select` 筛选器
 - 支持 `.5` 列宽，如 `col-sm-1.5`（目前仅 `blue` 主题的预编译 CSS 包含这些样式）
 - 优化 HTTPS 站点的资源 URL 生成（推荐配置 `TrustProxies`，`admin.https` 配置已标记为废弃）
@@ -142,6 +144,22 @@ php artisan optimize:clear
 - [中文文档](https://learnku.com/docs/dcat-admin)
 - [English documentation](http://www.dcatadmin.com/docs/en-2.x/quick-start.html)
 - [原项目 README（功能特性、扩展、鸣谢）](README.origin.md)
+
+原项目文档停更于 v2.2.2-beta（2022-06），部分示例已与当前代码不符，已知问题见 [文档勘误](docs/errata-2.x.md)。
+
+## AI 编码助手 Skill
+
+本包内置一个 [Agent Skill](https://agentskills.io)（`.agents/skills/dcat-admin`），内容基于原项目 2.x 文档逐条对照源码核实修正，可让 Claude Code、Codex、Cursor 等 AI 编码助手写出真实存在的 Grid / Form / Show / Action 等 API 调用。
+
+```bash
+# 方式一：通过 artisan 发布到项目的 .agents/skills/，--claude 同时复制到 .claude/skills/
+php artisan admin:publish --skills --claude
+
+# 方式二：通过 skills CLI 安装
+npx skills add PrintNow/dcat-admin
+```
+
+升级本包后重新执行 `php artisan admin:publish --skills --claude --force` 以同步 skill 内容。
 
 ## 免责声明
 
