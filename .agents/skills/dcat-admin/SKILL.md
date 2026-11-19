@@ -3,13 +3,13 @@ name: dcat-admin
 description: 使用 Dcat Admin 2.x（printnow/laravel-admin、dcat/laravel-admin）开发 Laravel 后台时使用：编写或修改 AdminController、Grid 数据表格（列、展示器、筛选 filter、快捷搜索、导出、行内编辑）、Form 表单（字段、验证、事件回调、hasMany/embeds 关联）、Show 详情、Tree 模型树、Action 动作与 JsonResponse、Widgets/Metrics 图表、权限菜单、前端 JS/pjax、扩展开发。Use for any Dcat Admin / dcat-admin admin panel code.
 license: MIT
 metadata:
-  dcat-admin: "2.4.x (printnow/laravel-admin)"
+  dcat-admin: "2.4.x / 2.5.x (printnow/laravel-admin)"
   source-docs: "dcat-admin/docs 2.x @ cb535380，已逐条对照源码核实并修正"
 ---
 
 # Dcat Admin 2.x
 
-适用于 `printnow/laravel-admin` 2.4.x，API 与原版 `dcat/laravel-admin` 2.x 兼容；PHP 8.1+，Laravel 10–13。原官方文档有大量错误和 1.x 残留，与本 skill 冲突时以本 skill 为准。
+适用于 `printnow/laravel-admin` 2.4.x / 2.5.x，API 与原版 `dcat/laravel-admin` 2.x 兼容；PHP 8.1+，Laravel 10–13。原官方文档有大量错误和 1.x 残留，与本 skill 冲突时以本 skill 为准。
 
 **用法**：先过一遍下面的高频陷阱，再按任务只读对应的 reference。仍不确定时直接打开表中列出的源码文件，不要全局 grep。源码路径相对于 `vendor/printnow/laravel-admin/`（原版为 `vendor/dcat/laravel-admin/`）。
 
@@ -57,8 +57,8 @@ metadata:
 13. `creationRules()` / `updateRules()` 会**替换**对应模式下的 `rules()`，而不是叠加，所以 `same()` 加的 `confirmed` 也会随之失效。unique 规则忽略自身写 `'unique:users,email,{{id}}'`。
 14. 数组值字段（`checkbox`、`multipleSelect`、`tags`、`multipleImage`/`multipleFile`、`embeds`、`table`、`array`、`keyValue`、`list`）不会自动编码。模型 `$casts` 和字段 `->saveAsJson()` 二选一，两者都配会双重编码。
 15. 编辑带关联的表单要预加载：`Form::make(Post::with('tags'), ...)`。多对多还需 `->customFormat(fn ($v) => array_column($v ?: [], 'id'))`。`hasMany` 的子模型需要 `$fillable`。
-16. select 的选项：全量用 `->options(Category::pluck('title', 'id'))`；远程搜索用 `->ajax(url)`，并配合 `->model(Category::class, 'id', 'title')` 回显当前值。⚠️ `options(Model::class, ...)` 传类名在 2.4.0–2.4.7 中不可用（缺少 `Model` 导入，2.4.8 已修复）；需兼容这些版本时用上面的写法。
-17. `disable()` 的字段不会被提交，只读展示用 `readOnly()` 或 `display()`。`number()` 回显时会转成 int，小数请用 `decimal()` 或 `currency()`。分步表单已移出核心，需要安装 `dcat-admin/form-step` 扩展。
+16. select 的选项：全量用 `->options(Category::pluck('title', 'id'))`；远程搜索用 `->ajax(url)`，并配合 `->model(Category::class, 'id', 'title')` 回显当前值。⚠️ `options(Model::class, ...)` 传类名在 2.4.0–2.4.7 中不可用（缺少 `Model` 导入，2.5.0 已修复）；需兼容这些版本时用上面的写法。
+17. `disable()` 的字段不会被提交，只读展示用 `readOnly()` 或 `display()`。`number()` 回显时会转成 int，小数请用 `decimal()` 或 `currency()`；只允许整数用 `number()->integer()`（2.5.0+）。分步表单已移出核心，需要安装 `dcat-admin/form-step` 扩展。
 
 **Show**
 

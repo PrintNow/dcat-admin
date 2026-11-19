@@ -14,8 +14,8 @@
 
 | # | 问题 | 位置 | 影响 | 状态 |
 |---|---|---|---|---|
-| 1 | `select()->options(Model::class, 'id', 'name')` 传模型类名失效。重构提交 f676ac3c 删掉了 `use Illuminate\Database\Eloquent\Model;`，`Model::class` 被解析成不存在的 `Dcat\Admin\Form\Field\Model`，类名被当作 ajax URL，带第 2、3 个参数时抛 TypeError | src/Form/Field/Select.php:45 | **本 fork 回归**，原版 2.x 的写法直接报错 | 已修复（2.4.8，#46） |
-| 1a | 筛选器 `select()` 传远程 URL（如 `$filter->equal('x')->select('/api/xxx')`）时抛 `Class Dcat\Admin\Grid\Filter\Presenter\Helper not found`；options 为 Collection 时 `instanceof Arrayable` 永远为 false。同样是 f676ac3c 删除了 `use Dcat\Admin\Support\Helper;`、`use Illuminate\Contracts\Support\Arrayable;` | src/Grid/Filter/Presenter/Select.php:97、135 | **本 fork 回归**（2.4.0 起），远程筛选下拉直接报错 | 已修复（2.4.8，#46） |
+| 1 | `select()->options(Model::class, 'id', 'name')` 传模型类名失效。重构提交 f676ac3c 删掉了 `use Illuminate\Database\Eloquent\Model;`，`Model::class` 被解析成不存在的 `Dcat\Admin\Form\Field\Model`，类名被当作 ajax URL，带第 2、3 个参数时抛 TypeError | src/Form/Field/Select.php:45 | **本 fork 回归**，原版 2.x 的写法直接报错 | 已修复（2.5.0，#46） |
+| 1a | 筛选器 `select()` 传远程 URL（如 `$filter->equal('x')->select('/api/xxx')`）时抛 `Class Dcat\Admin\Grid\Filter\Presenter\Helper not found`；options 为 Collection 时 `instanceof Arrayable` 永远为 false。同样是 f676ac3c 删除了 `use Dcat\Admin\Support\Helper;`、`use Illuminate\Contracts\Support\Arrayable;` | src/Grid/Filter/Presenter/Select.php:97、135 | **本 fork 回归**（2.4.0 起），远程筛选下拉直接报错 | 已修复（2.5.0，#46） |
 | 2 | `Show\Field::json()` 只对第一层数组元素调用 `htmlspecialchars`，值中有嵌套数组或对象时抛 TypeError | src/Show/Field.php:409-414 | **本 fork 回归**（2.4.x XSS 修复引入），详情页 500 | 已核实 |
 | 3 | `month` 筛选器的日期选择器提交 `YYYY-MM`，查询却用 `whereMonth`，按默认用法永远查不到数据 | src/Grid/Filter/AbstractFilter.php:411-414、src/Grid/Filter/Month.php | 功能不可用 | 已核实 |
 | 4 | Action 设置了非空 `href()` 后仍会绑定 `handle()` 请求脚本，点击时既跳转又发 AJAX 请求 | src/Actions/Action.php:189-199、240 | 可能触发意外写操作 | 已核实 |
@@ -48,10 +48,10 @@
 | 32 | `EmbeddedForm::prepareValue()` 遇到没有对应子字段的键时 `$field` 为 null，`method_exists(null, 'prepare')` 在 PHP 8 抛 TypeError；embeds 提交值中混入额外键（如 saving 中与原值合并）会导致保存失败 | src/Form/EmbeddedForm.php:186-194 | 已核实 |
 | 33 | `same('password')` 把 `confirmed` 规则追加到对方字段的默认 `rules`，而设置了 `creationRules`/`updateRules` 的字段在对应模式下会整体忽略默认 `rules`，导致一致性校验只剩前端 | src/Form/Field/Text.php:72-73、src/Form/Concerns/HasFieldValidator.php:119-127 | 已核实 |
 | 34 | 重写后的 `$.post(options)` 直接执行 `Object.assign(options.data, {_token})`，未传 `data` 时抛 TypeError，请求不会发出 | resources/assets/dcat/js/extensions/Ajax.js:40-42 | 已核实 |
-| 35 | 未启用导出时 `handleExportRequest(true)` 读取未定义的 `$scope`，返回 500 | src/Grid/Concerns/HasExporter.php:61-76 | 已修复（2.4.8，#50） |
-| 36 | 普通 Widget Form（未 use `LazyWidget`）在请求带 `_payload_` 参数时调用不存在的 `payload()`，任意用户可通过 URL 参数触发 500 | src/Widgets/Form.php `initPayload()` | 已修复（2.4.8，#50） |
-| 37 | `File`/`Image` 字段 `deleteFileAndResponse()` 误调被 `UploadField::deleteFile($paths)` 覆盖的方法：未传磁盘时不删除却返回成功，传入磁盘时抛 TypeError | src/Traits/HasUploadedFile.php:76-81、src/Form/Field/UploadField.php | 已修复（2.4.8，#50） |
-| 38 | `AuthController` 使用 `HasFormResponse` 但未定义 `CURRENT_URL_NAME`，子类调用 `getCurrentUrl()` 报 Undefined constant | src/Http/Controllers/AuthController.php | 已修复（2.4.8，#50） |
+| 35 | 未启用导出时 `handleExportRequest(true)` 读取未定义的 `$scope`，返回 500 | src/Grid/Concerns/HasExporter.php:61-76 | 已修复（2.5.0，#50） |
+| 36 | 普通 Widget Form（未 use `LazyWidget`）在请求带 `_payload_` 参数时调用不存在的 `payload()`，任意用户可通过 URL 参数触发 500 | src/Widgets/Form.php `initPayload()` | 已修复（2.5.0，#50） |
+| 37 | `File`/`Image` 字段 `deleteFileAndResponse()` 误调被 `UploadField::deleteFile($paths)` 覆盖的方法：未传磁盘时不删除却返回成功，传入磁盘时抛 TypeError | src/Traits/HasUploadedFile.php:76-81、src/Form/Field/UploadField.php | 已修复（2.5.0，#50） |
+| 38 | `AuthController` 使用 `HasFormResponse` 但未定义 `CURRENT_URL_NAME`，子类调用 `getCurrentUrl()` 报 Undefined constant | src/Http/Controllers/AuthController.php | 已修复（2.5.0，#50） |
 | 39 | `ImageField` 仅适配 intervention/image v2：装 v3（Laravel 11+ 新项目默认）时 `__call` 误报未安装，`thumbnail()` 直接 Class not found | src/Form/Field/ImageField.php:52、79、173 | 已核实 |
 
 ## 低优先级
