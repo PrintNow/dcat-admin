@@ -73,7 +73,7 @@ Group 方法（参数 `$label = ''`，空时显示操作符）：`equal` `notEqu
 默认 `Text`。调用 Presenter 方法会**替换**表单类型并**返回 Presenter 对象**（不再是筛选器）。
 
 - Text：`placeholder()`、`url()`、`email()`、`integer()`、`ip()`、`mac()`、`mobile($mask = '19999999999')`、`decimal($options = [])`、`currency()`、`percentage()`（Inputmask numeric 选项）、`inputmask($options = [], $icon = 'pencil')`。
-- `select($options)`：数组；`UnitEnum` 数组（BackedEnum 用 value=>name，纯枚举 name=>name）；闭包（绑定到筛选器，参数为当前值）；**字符串 = 页面加载时一次性 ajax 拉全部选项**，响应 `[{id, text}, ...]`。 ⚠️ 2.4.0–2.4.7 中传字符串 URL 会抛 `Presenter\Helper not found`（缺少 import 的回归），这些版本请改用 `ajax()` 或先查出数组再传入。`in()->multipleSelect([...])`。
+- `select($options)`：数组；`UnitEnum` 数组（BackedEnum 用 value=>name，纯枚举 name=>name）；闭包（绑定到筛选器，参数为当前值）；**字符串 = 页面加载时一次性 ajax 拉全部选项**，响应 `[{id, text}, ...]`。 ⚠️ 2.4.0–2.4.7 中传字符串 URL 会抛 `Presenter\Helper not found`（缺少 import 的回归，2.4.8 已修复），需兼容这些版本时改用 `ajax()` 或先查出数组再传入。`in()->multipleSelect([...])`。
 
 Select 可链（源码：src/Grid/Filter/Presenter/Select.php）：
 
