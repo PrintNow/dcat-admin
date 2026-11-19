@@ -395,6 +395,29 @@ trait UploadField
     }
 
     /**
+     * 删除文件并响应返回值.
+     *
+     * 本类的 deleteFile($paths) 覆盖了 HasUploadedFile::deleteFile($disk, $path)，
+     * 因此不能直接沿用 trait 中的实现。
+     *
+     * @param  \Illuminate\Contracts\Filesystem\Filesystem|null  $disk  指定时按 trait 原语义在该磁盘删除；未指定时使用字段配置的磁盘
+     * @param  string|null  $path
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteFileAndResponse($disk = null, $path = null)
+    {
+        $path = $path ?: request()->key;
+
+        if ($disk) {
+            $disk->delete($path);
+        } else {
+            $this->deleteFile($path);
+        }
+
+        return $this->responseDeleted();
+    }
+
+    /**
      * Destroy files.
      *
      * @param  string|array  $path

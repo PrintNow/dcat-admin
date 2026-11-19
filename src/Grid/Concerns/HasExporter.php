@@ -58,6 +58,8 @@ trait HasExporter
      */
     public function handleExportRequest($forceExport = false)
     {
+        $scope = null;
+
         if (
             $this->exported
             || (

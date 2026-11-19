@@ -18,6 +18,8 @@ class AuthController extends Controller
 {
     use HasFormResponse;
 
+    const CURRENT_URL_NAME = '_current_';
+
     /**
      * @var string
      */
