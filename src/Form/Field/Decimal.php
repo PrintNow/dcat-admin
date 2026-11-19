@@ -4,6 +4,8 @@ namespace Dcat\Admin\Form\Field;
 
 class Decimal extends Text
 {
+    protected $inputmaskNormalizePaste = true;
+
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
