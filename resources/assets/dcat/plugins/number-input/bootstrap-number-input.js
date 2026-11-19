@@ -56,6 +56,18 @@
                 return parseFloat(val);
             }
 
+            // 去掉小数部分（向零取整，与 PHP (int) 一致），按字符串处理以免大数丢失精度
+            function toInteger(val) {
+                var m = /^([-+]?)(\d*)/.exec(val),
+                    digits = m[2].replace(/^0+/, '');
+
+                if (digits === '') {
+                    return '0';
+                }
+
+                return (m[1] === '-' ? '-' : '') + digits;
+            }
+
             function clamp(n) {
                 if (min !== null && n < min) {
                     return min;
@@ -137,14 +149,14 @@
                     return;
                 }
 
-                var cleaned = clean(raw),
+                var cleaned = settings.integer ? toInteger(clean(raw)) : clean(raw),
                     // 与原逻辑保持一致：按整数部分判断是否超出 min/max
                     limited = clamp(parseInt(n));
 
                 if (limited !== parseInt(n)) {
                     setText(limited);
                 } else if (cleaned !== clone.val()) {
-                    // 仅做半角转换并去掉空白与千分位分隔符，其余保持用户输入原样
+                    // 仅做半角转换并去掉空白与千分位分隔符（开启 integer 时再去掉小数部分），其余保持用户输入原样
                     setText(cleaned);
                 } else {
                     lastValid = cleaned;
