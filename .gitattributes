@@ -1,2 +1,4 @@
 resources/* linguist-vendored
 *.js linguist-language=php
+/tools export-ignore
+/.claude export-ignore
