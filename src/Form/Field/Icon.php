@@ -34,7 +34,7 @@ setTimeout(function () {
        showIcon($(this).find('i').attr('class'));
     });
     
-    field.on('keyup', function (e) {
+    field.on('keyup input', function (e) {
         var val = $(this).val();
         
         if (val.indexOf('fa-') !== -1) {
