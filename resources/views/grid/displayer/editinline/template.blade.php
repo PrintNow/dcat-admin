@@ -114,8 +114,16 @@
         switch($popover.data('type')) {
             case 'input':
             case 'textarea':
-                val = $popover.find('.ie-input').val();
+                var $input = $popover.find('.ie-input');
+                val = $input.val();
                 label = val;
+                // 数值类掩码提交去掉掩码后的值（显示仍使用带格式的值）
+                if ($input.attr('data-unmask') && $input[0] && $input[0].inputmask) {
+                    val = $input.inputmask('unmaskedvalue');
+                    if (val === null || val === undefined) {
+                        val = '';
+                    }
+                }
                 break;
             case 'checkbox':
                 val = [];
@@ -132,7 +140,8 @@
                 break;
         }
 
-        if (val == original) {
+        // 宽松比较会把 "" 与 0 / false 视为相等，导致把 0 清空后不提交，这里排除该情况
+        if (val == original && ! (val === '' && original !== '')) {
             hide();
             return;
         }
