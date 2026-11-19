@@ -23,7 +23,9 @@ class PublishCommand extends Command
     {--lang : Publish language files}
     {--assets : Publish assets files}
     {--migrations : Publish migrations files}
-    {--config : Publish configuration files}';
+    {--config : Publish configuration files}
+    {--skills : Publish AI agent skills to .agents/skills}
+    {--claude : Also publish AI agent skills to .claude/skills (implies --skills)}';
 
     /**
      * The console command description.
@@ -85,6 +87,12 @@ class PublishCommand extends Command
         }
         if ($this->option('config')) {
             $tags[] = 'dcat-admin-config';
+        }
+        if ($this->option('skills') || $this->option('claude')) {
+            $this->tags[] = 'dcat-admin-skills';
+        }
+        if ($this->option('claude')) {
+            $this->tags[] = 'dcat-admin-skills-claude';
         }
 
         // 设置默认标签.
